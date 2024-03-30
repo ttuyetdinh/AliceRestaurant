@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AliceRestaurant.Models
 {
     // create a cateogry with self referencing
-    public class DeliveryMenu
+    public class DeliveryMenuDTO
     {
         [Key]
         public int DeliveryMenuId { get; set; }
@@ -16,8 +16,5 @@ namespace AliceRestaurant.Models
         public DeliveryMenu? ParentMenu { get; set; }
         public List<DeliveryMenu>? DeliveryMenus { get; set; }
         public ICollection<Dish>? Dishes { get; set; }
-
-        public DateTime? LastUpdated { get; set; } = DateTime.Now;
-        public DateTime? CreatedOn { get; set; } = DateTime.Now;
     }
 }

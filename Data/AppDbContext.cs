@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using AliceRestaurant.Extensions;
 using AliceRestaurant.Models;
 
 
@@ -14,15 +14,24 @@ namespace AliceRestaurant.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-        public DbSet<Dish> Dishes { get; set; }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
 
-        // create a seed method to add data to the database
+        }
+        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<RestaurantDish> RestaurantDishes { get; set; }
+        public DbSet<DineInMenu> DineInMenus { get; set; }
+        public DbSet<DeliveryMenu> DeliveryMenus { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             // apply the configuration classes to the model builder
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            // extension method to seed data
+            modelBuilder.SeedData();
         }
     }
+
 }

@@ -16,5 +16,8 @@ namespace AliceRestaurant.Models
         public DineInMenu? ParentMenu { get; set; }
         public List<DineInMenu>? DineInMenus { get; set; }
         public ICollection<Dish>? Dishes { get; set; }
+
+        public DateTime? LastUpdated { get; set; } = DateTime.Now;
+        public DateTime? CreatedOn { get; set; } = DateTime.Now;
     }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using AliceRestaurant.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace AliceRestaurant.Models
@@ -14,6 +15,7 @@ namespace AliceRestaurant.Models
         public int DishId { get; set; }
         public int DineInMenuId { get; set; } // foreign key
         public int DeliveryMenuId { get; set; } // foreign key
+        public int RestaurantId { get; set; } // foreign key
         [Required]
         public string? DishName { get; set; } = "";
         public string? ShortName { get; set; } = "";
@@ -29,6 +31,8 @@ namespace AliceRestaurant.Models
         public string? ImageUrl { get; set; } = "";
         public DineInMenu? DineInMenu { get; set; }
         public DeliveryMenu? DeliveryMenu { get; set; }
+        public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
+
         public DateTime? LastUpdated { get; set; } = DateTime.Now;
         public DateTime? CreatedOn { get; set; } = DateTime.Now;
     }
