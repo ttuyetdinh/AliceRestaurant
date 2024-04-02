@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AliceRestaurant.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240330120234_add_restaurant_table")]
-    partial class add_restaurant_table
+    [Migration("20240402090035_init_database")]
+    partial class init_database
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,46 +25,58 @@ namespace AliceRestaurant.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AliceRestaurant.Models.DeliveryMenu", b =>
+            modelBuilder.Entity("AliceRestaurant.Models.DeliveryCategory", b =>
                 {
-                    b.Property<int>("DeliveryMenuId")
+                    b.Property<int>("DeliveryCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeliveryMenuId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeliveryCategoryId"));
 
-                    b.Property<string>("MenuName")
+                    b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentMenuId")
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ParentCategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("DeliveryMenuId");
+                    b.HasKey("DeliveryCategoryId");
 
-                    b.HasIndex("ParentMenuId");
+                    b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("DeliveryMenu");
+                    b.ToTable("DeliveryCategories");
                 });
 
-            modelBuilder.Entity("AliceRestaurant.Models.DineInMenu", b =>
+            modelBuilder.Entity("AliceRestaurant.Models.DineInCategory", b =>
                 {
-                    b.Property<int>("DineInMenuId")
+                    b.Property<int>("DineInCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DineInMenuId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DineInCategoryId"));
 
-                    b.Property<string>("MenuName")
+                    b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentMenuId")
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ParentCategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("DineInMenuId");
+                    b.HasKey("DineInCategoryId");
 
-                    b.HasIndex("ParentMenuId");
+                    b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("DineInMenu");
+                    b.ToTable("DineInCategories");
                 });
 
             modelBuilder.Entity("AliceRestaurant.Models.Dish", b =>
@@ -81,7 +93,7 @@ namespace AliceRestaurant.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeliveryMenuId")
+                    b.Property<int>("DeliveryCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("DeliveryType")
@@ -90,7 +102,7 @@ namespace AliceRestaurant.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DineInMenuId")
+                    b.Property<int>("DineInCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("DineInType")
@@ -129,9 +141,9 @@ namespace AliceRestaurant.Migrations
 
                     b.HasKey("DishId");
 
-                    b.HasIndex("DeliveryMenuId");
+                    b.HasIndex("DeliveryCategoryId");
 
-                    b.HasIndex("DineInMenuId");
+                    b.HasIndex("DineInCategoryId");
 
                     b.ToTable("Dishes");
                 });
@@ -144,12 +156,18 @@ namespace AliceRestaurant.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RestaurantId"));
 
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastUpdated")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RestaurantId");
 
-                    b.ToTable("Restaurant");
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("AliceRestaurant.Models.RestaurantDish", b =>
@@ -160,48 +178,54 @@ namespace AliceRestaurant.Migrations
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastUpdated")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("DishId", "RestaurantId");
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("RestaurantDish");
+                    b.ToTable("RestaurantDishes");
                 });
 
-            modelBuilder.Entity("AliceRestaurant.Models.DeliveryMenu", b =>
+            modelBuilder.Entity("AliceRestaurant.Models.DeliveryCategory", b =>
                 {
-                    b.HasOne("AliceRestaurant.Models.DeliveryMenu", "ParentMenu")
-                        .WithMany("DeliveryMenus")
-                        .HasForeignKey("ParentMenuId");
+                    b.HasOne("AliceRestaurant.Models.DeliveryCategory", "ParentCategory")
+                        .WithMany("DeliveryCategories")
+                        .HasForeignKey("ParentCategoryId");
 
-                    b.Navigation("ParentMenu");
+                    b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("AliceRestaurant.Models.DineInMenu", b =>
+            modelBuilder.Entity("AliceRestaurant.Models.DineInCategory", b =>
                 {
-                    b.HasOne("AliceRestaurant.Models.DineInMenu", "ParentMenu")
-                        .WithMany("DineInMenus")
-                        .HasForeignKey("ParentMenuId");
+                    b.HasOne("AliceRestaurant.Models.DineInCategory", "ParentCategory")
+                        .WithMany("DineInCategories")
+                        .HasForeignKey("ParentCategoryId");
 
-                    b.Navigation("ParentMenu");
+                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("AliceRestaurant.Models.Dish", b =>
                 {
-                    b.HasOne("AliceRestaurant.Models.DeliveryMenu", "DeliveryMenu")
+                    b.HasOne("AliceRestaurant.Models.DeliveryCategory", "DeliveryCategory")
                         .WithMany("Dishes")
-                        .HasForeignKey("DeliveryMenuId")
+                        .HasForeignKey("DeliveryCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AliceRestaurant.Models.DineInMenu", "DineInMenu")
+                    b.HasOne("AliceRestaurant.Models.DineInCategory", "DineInCategory")
                         .WithMany("Dishes")
-                        .HasForeignKey("DineInMenuId")
+                        .HasForeignKey("DineInCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DeliveryMenu");
+                    b.Navigation("DeliveryCategory");
 
-                    b.Navigation("DineInMenu");
+                    b.Navigation("DineInCategory");
                 });
 
             modelBuilder.Entity("AliceRestaurant.Models.RestaurantDish", b =>
@@ -223,16 +247,16 @@ namespace AliceRestaurant.Migrations
                     b.Navigation("Restaurant");
                 });
 
-            modelBuilder.Entity("AliceRestaurant.Models.DeliveryMenu", b =>
+            modelBuilder.Entity("AliceRestaurant.Models.DeliveryCategory", b =>
                 {
-                    b.Navigation("DeliveryMenus");
+                    b.Navigation("DeliveryCategories");
 
                     b.Navigation("Dishes");
                 });
 
-            modelBuilder.Entity("AliceRestaurant.Models.DineInMenu", b =>
+            modelBuilder.Entity("AliceRestaurant.Models.DineInCategory", b =>
                 {
-                    b.Navigation("DineInMenus");
+                    b.Navigation("DineInCategories");
 
                     b.Navigation("Dishes");
                 });

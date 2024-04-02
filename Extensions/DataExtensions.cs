@@ -14,12 +14,12 @@ namespace AliceRestaurant.Extensions
             modelBuilder.SeedDineInCategory();
             modelBuilder.SeedDeliveryCategory();
             modelBuilder.SeedRestaurant();
-            modelBuilder.SeedRestaurantDish();
             modelBuilder.SeedDish();
+            modelBuilder.SeedRestaurantDish();
         }
         public static void SeedDineInCategory(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DineInCategory>().HasData(
+            var seedDineIn = new List<DineInCategory>(){
                 new DineInCategory
                 {
                     DineInCategoryId = 1,
@@ -48,12 +48,20 @@ namespace AliceRestaurant.Extensions
                     ParentCategoryId = 2,
                     CategoryName = "Sub DineIn C",
                 }
-            );
+            };
+
+            seedDineIn.ForEach(u =>
+            {
+                u.CreatedOn = DateTime.Now;
+                u.LastUpdated = DateTime.Now;
+            });
+
+            modelBuilder.Entity<DineInCategory>().HasData(seedDineIn);
         }
 
         public static void SeedDeliveryCategory(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DeliveryCategory>().HasData(
+            var seedDelivery = new List<DeliveryCategory>(){
                 new DeliveryCategory
                 {
                     DeliveryCategoryId = 1,
@@ -82,11 +90,19 @@ namespace AliceRestaurant.Extensions
                     ParentCategoryId = 2,
                     CategoryName = "Sub Delivery C",
                 }
-            );
+            };
+
+            seedDelivery.ForEach(u =>
+            {
+                u.CreatedOn = DateTime.Now;
+                u.LastUpdated = DateTime.Now;
+            });
+
+            modelBuilder.Entity<DeliveryCategory>().HasData(seedDelivery);
         }
         public static void SeedRestaurant(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Restaurant>().HasData(
+            var seedRestaurant = new List<Restaurant>(){
                 new Restaurant
                 {
                     RestaurantId = 1,
@@ -102,12 +118,20 @@ namespace AliceRestaurant.Extensions
                     RestaurantId = 3,
                     Name = "Restaurant 3",
                 }
-            );
+
+            };
+            seedRestaurant.ForEach(u =>
+            {
+                u.CreatedOn = DateTime.Now;
+                u.LastUpdated = DateTime.Now;
+            });
+
+            modelBuilder.Entity<Restaurant>().HasData(seedRestaurant);
         }
 
         public static void SeedRestaurantDish(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RestaurantDish>().HasData(
+            var seedRestaurantDish = new List<RestaurantDish>(){
                 new RestaurantDish
                 {
                     DishId = 1,
@@ -116,36 +140,28 @@ namespace AliceRestaurant.Extensions
                 new RestaurantDish
                 {
                     DishId = 2,
-                    RestaurantId = 1,
-                },
-                new RestaurantDish
-                {
-                    DishId = 3,
-                    RestaurantId = 1,
-                },
-
-                new RestaurantDish
-                {
-                    DishId = 1,
                     RestaurantId = 2,
                 },
-                new RestaurantDish
-                {
-                    DishId = 2,
-                    RestaurantId = 2,
-                },
-
                 new RestaurantDish
                 {
                     DishId = 3,
                     RestaurantId = 3,
                 }
-            );
+            };
+
+            seedRestaurantDish.ForEach(u =>
+            {
+                u.CreatedOn = DateTime.Now;
+                u.LastUpdated = DateTime.Now;
+            });
+
+            modelBuilder.Entity<RestaurantDish>().HasData(seedRestaurantDish);
         }
 
         public static void SeedDish(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Dish>().HasData(
+            var seedDish = new List<Dish>(){
+
                 new Dish
                 {
                     DishId = 1,
@@ -161,7 +177,6 @@ namespace AliceRestaurant.Extensions
                     Allergy = "Allergy",
                     DineInType = "DineIn",
                     DeliveryType = "Delivery",
-                    SellingDate = DateTime.Now,
                     IsAvailable = true,
                     ImageUrl = "https://www.google.com",
                 },
@@ -180,7 +195,6 @@ namespace AliceRestaurant.Extensions
                     Allergy = "Allergy",
                     DineInType = "DineIn",
                     DeliveryType = "Delivery",
-                    SellingDate = DateTime.Now,
                     IsAvailable = true,
                     ImageUrl = "https://www.google.com",
                 },
@@ -199,11 +213,18 @@ namespace AliceRestaurant.Extensions
                     Allergy = "Allergy",
                     DineInType = "DineIn",
                     DeliveryType = "Delivery",
-                    SellingDate = DateTime.Now,
                     IsAvailable = true,
                     ImageUrl = "https://www.google.com",
                 }
-            );
+            };
+
+            seedDish.ForEach(u =>
+            {
+                u.CreatedOn = DateTime.Now;
+                u.LastUpdated = DateTime.Now;
+            });
+
+            modelBuilder.Entity<Dish>().HasData(seedDish);
         }
     }
 }

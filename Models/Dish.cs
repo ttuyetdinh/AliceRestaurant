@@ -26,14 +26,14 @@ namespace AliceRestaurant.Models
         public string? Allergy { get; set; } = "";
         public string? DineInType { get; set; } = "";
         public string? DeliveryType { get; set; } = "";
-        public DateTime? SellingDate { get; set; } = null;
+        public DateTime? SellingDate { get; set; }
         public bool? IsAvailable { get; set; } = true;
         public string? ImageUrl { get; set; } = "";
         public DineInCategory? DineInCategory { get; set; }
         public DeliveryCategory? DeliveryCategory { get; set; }
         public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
 
-        public DateTime? LastUpdated { get; set; } = DateTime.Now;
-        public DateTime? CreatedOn { get; set; } = DateTime.Now;
+        public DateTime? LastUpdated { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 }

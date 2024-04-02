@@ -14,7 +14,7 @@ namespace AliceRestaurant.Models
         public string? Name { get; set; } = "";
         public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
 
-        public DateTime? LastUpdated { get; set; } = DateTime.Now;
-        public DateTime? CreatedOn { get; set; } = DateTime.Now;
+        public DateTime? LastUpdated { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 }

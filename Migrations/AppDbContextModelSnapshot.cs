@@ -46,45 +46,45 @@ namespace AliceRestaurant.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("DeliveryCategories");
+                    b.ToTable("DeliveryCategories", (string)null);
 
                     b.HasData(
                         new
                         {
                             DeliveryCategoryId = 1,
                             CategoryName = "Delivery 1",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2825),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2824)
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9050),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9051)
                         },
                         new
                         {
                             DeliveryCategoryId = 2,
                             CategoryName = "Delivery 2",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2828),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2828)
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9054),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9054)
                         },
                         new
                         {
                             DeliveryCategoryId = 3,
                             CategoryName = "Sub Delivery A",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2829),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2829),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9055),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9055),
                             ParentCategoryId = 1
                         },
                         new
                         {
                             DeliveryCategoryId = 4,
                             CategoryName = "Sub Delivery B",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2831),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2830),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9056),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9056),
                             ParentCategoryId = 1
                         },
                         new
                         {
                             DeliveryCategoryId = 5,
                             CategoryName = "Sub Delivery C",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2832),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2832),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9057),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9057),
                             ParentCategoryId = 2
                         });
                 });
@@ -113,45 +113,45 @@ namespace AliceRestaurant.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("DineInCategories");
+                    b.ToTable("DineInCategories", (string)null);
 
                     b.HasData(
                         new
                         {
                             DineInCategoryId = 1,
                             CategoryName = "DineIn 1",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2699),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2686)
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8859),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8877)
                         },
                         new
                         {
                             DineInCategoryId = 2,
                             CategoryName = "DineIn 2",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2702),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2701)
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8879),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8880)
                         },
                         new
                         {
                             DineInCategoryId = 3,
                             CategoryName = "Sub DineIn A",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2703),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2703),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8881),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8881),
                             ParentCategoryId = 1
                         },
                         new
                         {
                             DineInCategoryId = 4,
                             CategoryName = "Sub DineIn B",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2705),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2704),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8882),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8882),
                             ParentCategoryId = 1
                         },
                         new
                         {
                             DineInCategoryId = 5,
                             CategoryName = "Sub DineIn C",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2706),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2706),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8883),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(8883),
                             ParentCategoryId = 2
                         });
                 });
@@ -222,14 +222,14 @@ namespace AliceRestaurant.Migrations
 
                     b.HasIndex("DineInCategoryId");
 
-                    b.ToTable("Dishes");
+                    b.ToTable("Dishes", (string)null);
 
                     b.HasData(
                         new
                         {
                             DishId = 1,
                             Allergy = "Allergy",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2928),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9185),
                             DeliveryCategoryId = 1,
                             DeliveryType = "Delivery",
                             Description = "Dish One Description",
@@ -240,17 +240,16 @@ namespace AliceRestaurant.Migrations
                             ImageUrl = "https://www.google.com",
                             IsAvailable = true,
                             KoreanName = "Dish One",
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2927),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9187),
                             Price = 10m,
                             RestaurantId = 1,
-                            SellingDate = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2934),
                             ShortName = "D1"
                         },
                         new
                         {
                             DishId = 2,
                             Allergy = "Allergy",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2937),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9188),
                             DeliveryCategoryId = 2,
                             DeliveryType = "Delivery",
                             Description = "Dish Two Description",
@@ -261,17 +260,16 @@ namespace AliceRestaurant.Migrations
                             ImageUrl = "https://www.google.com",
                             IsAvailable = true,
                             KoreanName = "Dish Two",
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2937),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9188),
                             Price = 20m,
                             RestaurantId = 2,
-                            SellingDate = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2940),
                             ShortName = "D2"
                         },
                         new
                         {
                             DishId = 3,
                             Allergy = "Allergy",
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2941),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9189),
                             DeliveryCategoryId = 3,
                             DeliveryType = "Delivery",
                             Description = "Dish Three Description",
@@ -282,10 +280,9 @@ namespace AliceRestaurant.Migrations
                             ImageUrl = "https://www.google.com",
                             IsAvailable = true,
                             KoreanName = "Dish Three",
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2941),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9189),
                             Price = 30m,
                             RestaurantId = 3,
-                            SellingDate = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2943),
                             ShortName = "D3"
                         });
                 });
@@ -309,28 +306,28 @@ namespace AliceRestaurant.Migrations
 
                     b.HasKey("RestaurantId");
 
-                    b.ToTable("Restaurants");
+                    b.ToTable("Restaurants", (string)null);
 
                     b.HasData(
                         new
                         {
                             RestaurantId = 1,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2860),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2860),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9117),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9118),
                             Name = "Restaurant 1"
                         },
                         new
                         {
                             RestaurantId = 2,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2863),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2862),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9119),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9120),
                             Name = "Restaurant 2"
                         },
                         new
                         {
                             RestaurantId = 3,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2864),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2864),
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9120),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9121),
                             Name = "Restaurant 3"
                         });
                 });
@@ -353,50 +350,29 @@ namespace AliceRestaurant.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("RestaurantDishes");
+                    b.ToTable("RestaurantDishes", (string)null);
 
                     b.HasData(
                         new
                         {
                             DishId = 1,
                             RestaurantId = 1,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2887),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2886)
-                        },
-                        new
-                        {
-                            DishId = 2,
-                            RestaurantId = 1,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2890),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2890)
-                        },
-                        new
-                        {
-                            DishId = 3,
-                            RestaurantId = 1,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2891),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2891)
-                        },
-                        new
-                        {
-                            DishId = 1,
-                            RestaurantId = 2,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2893),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2892)
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9411),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9412)
                         },
                         new
                         {
                             DishId = 2,
                             RestaurantId = 2,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2894),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2893)
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9414),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9415)
                         },
                         new
                         {
                             DishId = 3,
                             RestaurantId = 3,
-                            CreatedOn = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2895),
-                            LastUpdated = new DateTime(2024, 4, 2, 15, 12, 12, 206, DateTimeKind.Local).AddTicks(2894)
+                            CreatedOn = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9415),
+                            LastUpdated = new DateTime(2024, 4, 2, 16, 1, 49, 333, DateTimeKind.Local).AddTicks(9416)
                         });
                 });
 
