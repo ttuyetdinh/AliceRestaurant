@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace AliceRestaurant.Models
         public int? ParentMenuId { get; set; } //  foreign key to self
         public string? MenuName { get; set; } = "";
         public DineInMenu? ParentMenu { get; set; }
-        public List<DineInMenu>? DineInMenus { get; set; }
+        public ICollection<DineInMenu>? DineInMenus { get; set; }
         public ICollection<Dish>? Dishes { get; set; }
     }
 }
