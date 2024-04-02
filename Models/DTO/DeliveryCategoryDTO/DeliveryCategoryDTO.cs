@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AliceRestaurant.Models.DTO.DeliveryCategory
+namespace AliceRestaurant.Models.DTO.DeliveryCategoryDTO
 {
     // create a cateogry with self referencing
 

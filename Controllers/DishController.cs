@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AliceRestaurant.Models.DTO;
+using AliceRestaurant.Models.DTO.Dish;
 using AliceRestaurant.Repository;
 using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
@@ -29,7 +30,8 @@ namespace AliceRestaurant.Controllers
         {
             try
             {
-                var dishes = await _dishRepo.GetAllAsync();
+                var include = new List<string> { "DineInCategory", "DeliveryCategory", "RestaurantDishes" };
+                var dishes = await _dishRepo.GetAllAsync(includeProperties: include);
                 var dishesDTO = _mapper.Map<List<DishDTO>>(dishes);
 
 
@@ -46,12 +48,14 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+
         [HttpGet(nameof(GetDish) + "/{id:int}")]
         public async Task<IActionResult> GetDish(int id)
         {
             try
             {
-                var dish = await _dishRepo.GetAsync(e => e.DishId == id);
+                var include = new List<string> { "DineInCategory", "DeliveryCategory", "RestaurantDishes" };
+                var dish = await _dishRepo.GetAsync(e => e.DishId == id, includeProperties: include);
                 if (dish == null)
                 {
                     return NotFound(new ResponseDTO()

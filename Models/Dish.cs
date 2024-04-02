@@ -15,7 +15,6 @@ namespace AliceRestaurant.Models
         public int DishId { get; set; }
         public int DineInCategoryId { get; set; } // foreign key
         public int DeliveryCategoryId { get; set; } // foreign key
-        public int RestaurantId { get; set; } // foreign key
         [Required]
         public string? DishName { get; set; } = "";
         public string? ShortName { get; set; } = "";

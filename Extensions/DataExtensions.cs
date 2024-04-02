@@ -129,6 +129,72 @@ namespace AliceRestaurant.Extensions
             modelBuilder.Entity<Restaurant>().HasData(seedRestaurant);
         }
 
+        public static void SeedDish(this ModelBuilder modelBuilder)
+        {
+            var seedDish = new List<Dish>(){
+
+                new Dish
+                {
+                    DishId = 1,
+                    DineInCategoryId = 1,
+                    DeliveryCategoryId = 1,
+                    DishName = "Dish 1",
+                    ShortName = "D1",
+                    EnglishName = "Dish One",
+                    KoreanName = "Dish One",
+                    Price = 10.00,
+                    Description = "Dish One Description",
+                    Allergy = "Allergy",
+                    DineInType = "DineIn",
+                    DeliveryType = "Delivery",
+                    IsAvailable = true,
+                    ImageUrl = "https://www.google.com",
+                },
+                new Dish
+                {
+                    DishId = 2,
+                    DineInCategoryId = 2,
+                    DeliveryCategoryId = 2,
+                    DishName = "Dish 2",
+                    ShortName = "D2",
+                    EnglishName = "Dish Two",
+                    KoreanName = "Dish Two",
+                    Price = 20.00,
+                    Description = "Dish Two Description",
+                    Allergy = "Allergy",
+                    DineInType = "DineIn",
+                    DeliveryType = "Delivery",
+                    IsAvailable = true,
+                    ImageUrl = "https://www.google.com",
+                },
+                new Dish
+                {
+                    DishId = 3,
+                    DineInCategoryId = 3,
+                    DeliveryCategoryId = 3,
+                    DishName = "Dish 3",
+                    ShortName = "D3",
+                    EnglishName = "Dish Three",
+                    KoreanName = "Dish Three",
+                    Price = 30.00,
+                    Description = "Dish Three Description",
+                    Allergy = "Allergy",
+                    DineInType = "DineIn",
+                    DeliveryType = "Delivery",
+                    IsAvailable = true,
+                    ImageUrl = "https://www.google.com",
+                }
+            };
+
+            seedDish.ForEach(u =>
+            {
+                u.CreatedOn = DateTime.Now;
+                u.LastUpdated = DateTime.Now;
+            });
+
+            modelBuilder.Entity<Dish>().HasData(seedDish);
+        }
+
         public static void SeedRestaurantDish(this ModelBuilder modelBuilder)
         {
             var seedRestaurantDish = new List<RestaurantDish>(){
@@ -156,75 +222,6 @@ namespace AliceRestaurant.Extensions
             });
 
             modelBuilder.Entity<RestaurantDish>().HasData(seedRestaurantDish);
-        }
-
-        public static void SeedDish(this ModelBuilder modelBuilder)
-        {
-            var seedDish = new List<Dish>(){
-
-                new Dish
-                {
-                    DishId = 1,
-                    DineInCategoryId = 1,
-                    DeliveryCategoryId = 1,
-                    RestaurantId = 1,
-                    DishName = "Dish 1",
-                    ShortName = "D1",
-                    EnglishName = "Dish One",
-                    KoreanName = "Dish One",
-                    Price = 10.00,
-                    Description = "Dish One Description",
-                    Allergy = "Allergy",
-                    DineInType = "DineIn",
-                    DeliveryType = "Delivery",
-                    IsAvailable = true,
-                    ImageUrl = "https://www.google.com",
-                },
-                new Dish
-                {
-                    DishId = 2,
-                    DineInCategoryId = 2,
-                    DeliveryCategoryId = 2,
-                    RestaurantId = 2,
-                    DishName = "Dish 2",
-                    ShortName = "D2",
-                    EnglishName = "Dish Two",
-                    KoreanName = "Dish Two",
-                    Price = 20.00,
-                    Description = "Dish Two Description",
-                    Allergy = "Allergy",
-                    DineInType = "DineIn",
-                    DeliveryType = "Delivery",
-                    IsAvailable = true,
-                    ImageUrl = "https://www.google.com",
-                },
-                new Dish
-                {
-                    DishId = 3,
-                    DineInCategoryId = 3,
-                    DeliveryCategoryId = 3,
-                    RestaurantId = 3,
-                    DishName = "Dish 3",
-                    ShortName = "D3",
-                    EnglishName = "Dish Three",
-                    KoreanName = "Dish Three",
-                    Price = 30.00,
-                    Description = "Dish Three Description",
-                    Allergy = "Allergy",
-                    DineInType = "DineIn",
-                    DeliveryType = "Delivery",
-                    IsAvailable = true,
-                    ImageUrl = "https://www.google.com",
-                }
-            };
-
-            seedDish.ForEach(u =>
-            {
-                u.CreatedOn = DateTime.Now;
-                u.LastUpdated = DateTime.Now;
-            });
-
-            modelBuilder.Entity<Dish>().HasData(seedDish);
         }
     }
 }

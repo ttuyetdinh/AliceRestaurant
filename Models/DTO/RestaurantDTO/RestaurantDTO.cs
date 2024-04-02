@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AliceRestaurant.Models.DTO;
 
-namespace AliceRestaurant.Models.DTO
+namespace AliceRestaurant.Models.DTO.RestaurantDTO
 {
     public class RestaurantDTO
     {

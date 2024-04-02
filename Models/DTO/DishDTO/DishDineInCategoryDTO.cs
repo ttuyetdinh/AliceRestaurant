@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AliceRestaurant.Models.DTO.DeliveryCategory
+namespace AliceRestaurant.Models.DTO.Dish
 {
-    public class DeliveryCategoryParentDTO
+    public class DishDineInCategoryDTO
     {
         public int CategoryId { get; set; }
         public string? CategoryName { get; set; } = "";

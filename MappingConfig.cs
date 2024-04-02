@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AliceRestaurant.MapperConfig;
 using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
-using AliceRestaurant.Models.DTO.DeliveryCategory;
+using AliceRestaurant.Models.DTO.DeliveryCategoryDTO;
 using AliceRestaurant.Models.DTO.DineInCategory;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AliceRestaurant
 {
@@ -16,9 +18,8 @@ namespace AliceRestaurant
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<Dish, DishDTO>().ReverseMap();
-                config.CreateMap<Restaurant, RestaurantDTO>().ReverseMap();
-                config.CreateMap<RestaurantDish, RestaurantDishDTO>().ReverseMap();
+                config.ApplyDishMapping();
+                config.ApplyRestaurantMapping();
 
                 // For DeliveryCategory
                 config.CreateMap<DeliveryCategory, DeliveryCategoryDTO>()

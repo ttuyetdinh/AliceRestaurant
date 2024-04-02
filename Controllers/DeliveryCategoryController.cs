@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
-using AliceRestaurant.Models.DTO.DeliveryCategory;
+using AliceRestaurant.Models.DTO.DeliveryCategoryDTO;
 using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
