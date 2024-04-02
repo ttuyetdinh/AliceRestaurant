@@ -17,8 +17,8 @@ namespace AliceRestaurant
                 config.CreateMap<Dish, DishDTO>().ReverseMap();
                 config.CreateMap<Restaurant, RestaurantDTO>().ReverseMap();
                 config.CreateMap<RestaurantDish, RestaurantDishDTO>().ReverseMap();
-                config.CreateMap<DeliveryMenu, DeliveryMenuDTO>().ReverseMap();
-                config.CreateMap<DineInMenu, DineInMenuDTO>().ReverseMap();
+                config.CreateMap<DeliveryCategory, DeliveryCategoryDTO>().ReverseMap();
+                config.CreateMap<DineInCategory, DineInCategoryDTO>().ReverseMap();
             });
 
             return mappingConfig;

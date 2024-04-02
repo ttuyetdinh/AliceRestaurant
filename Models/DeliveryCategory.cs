@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace AliceRestaurant.Models
 {
     // create a cateogry with self referencing
-    public class DeliveryMenu
+    public class DeliveryCategory
     {
         [Key]
-        public int DeliveryMenuId { get; set; }
-        public int? ParentMenuId { get; set; } //  foreign key to self
-        public string? MenuName { get; set; } = "";
-        public DeliveryMenu? ParentMenu { get; set; }
-        public ICollection<DeliveryMenu>? DeliveryMenus { get; set; }
+        public int DeliveryCategoryId { get; set; }
+        public int? ParentCategoryId { get; set; } //  foreign key to self
+        public string? CategoryName { get; set; } = "";
+        public DeliveryCategory? ParentCategory { get; set; }
+        public ICollection<DeliveryCategory>? DeliveryCategories { get; set; }
         public ICollection<Dish>? Dishes { get; set; }
 
         public DateTime? LastUpdated { get; set; } = DateTime.Now;

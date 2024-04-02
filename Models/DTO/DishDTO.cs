@@ -8,8 +8,8 @@ namespace AliceRestaurant.Models.DTO
     public class DishDTO
     {
         public int DishId { get; set; }
-        public int DineInMenuId { get; set; } // foreign key
-        public int DeliveryMenuId { get; set; } // foreign key
+        public int DineInCategoryId { get; set; } // foreign key
+        public int DeliveryCategoryId { get; set; } // foreign key
         public int RestaurantId { get; set; } // foreign key
         public string? DishName { get; set; }
         public string? ShortName { get; set; }
@@ -23,8 +23,8 @@ namespace AliceRestaurant.Models.DTO
         public DateTime? SellingDate { get; set; }
         public bool? IsAvailable { get; set; }
         public string? ImageUrl { get; set; }
-        public DineInMenu? DineInMenu { get; set; }
-        public DeliveryMenu? DeliveryMenu { get; set; }
+        public DineInCategory? DineInCategory { get; set; }
+        public DeliveryCategory? DeliveryCategory { get; set; }
         public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
     }
 }

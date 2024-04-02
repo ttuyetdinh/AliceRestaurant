@@ -15,13 +15,13 @@ namespace AliceRestaurant.Data.Configuration
 
             builder.Property(d => d.Price).HasColumnType("decimal(18,2)");
 
-            builder.HasOne<DineInMenu>(e => e.DineInMenu)
+            builder.HasOne<DineInCategory>(e => e.DineInCategory)
                 .WithMany(d => d.Dishes)
-                .HasForeignKey(e => e.DineInMenuId);
+                .HasForeignKey(e => e.DineInCategoryId);
 
-            builder.HasOne<DeliveryMenu>(e => e.DeliveryMenu)
+            builder.HasOne<DeliveryCategory>(e => e.DeliveryCategory)
                 .WithMany(d => d.Dishes)
-                .HasForeignKey(e => e.DeliveryMenuId);
+                .HasForeignKey(e => e.DeliveryCategoryId);
         }
     }
 }

@@ -7,8 +7,8 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.Repository.IRepository
 {
-    public interface IDeliveryMenuRepository : IRepository<DeliveryMenu>
+    public interface IDeliveryCategoryRepository : IRepository<DeliveryCategory>
     {
-        Task<DeliveryMenu> UpdateAsync(DeliveryMenu entity);
+        Task<DeliveryCategory> UpdateAsync(DeliveryCategory entity);
     }
 }

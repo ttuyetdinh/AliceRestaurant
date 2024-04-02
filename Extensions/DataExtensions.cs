@@ -11,76 +11,76 @@ namespace AliceRestaurant.Extensions
     {
         public static void SeedData(this ModelBuilder modelBuilder)
         {
-            modelBuilder.SeedDineInMenu();
-            modelBuilder.SeedDeliveryMenu();
+            modelBuilder.SeedDineInCategory();
+            modelBuilder.SeedDeliveryCategory();
             modelBuilder.SeedRestaurant();
             modelBuilder.SeedRestaurantDish();
             modelBuilder.SeedDish();
         }
-        public static void SeedDineInMenu(this ModelBuilder modelBuilder)
+        public static void SeedDineInCategory(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DineInMenu>().HasData(
-                new DineInMenu
+            modelBuilder.Entity<DineInCategory>().HasData(
+                new DineInCategory
                 {
-                    DineInMenuId = 1,
-                    MenuName = "DineIn 1",
+                    DineInCategoryId = 1,
+                    CategoryName = "DineIn 1",
                 },
-                new DineInMenu
+                new DineInCategory
                 {
-                    DineInMenuId = 2,
-                    MenuName = "DineIn 2",
+                    DineInCategoryId = 2,
+                    CategoryName = "DineIn 2",
                 },
-                new DineInMenu
+                new DineInCategory
                 {
-                    DineInMenuId = 3,
-                    ParentMenuId = 1,
-                    MenuName = "Sub DineIn A",
+                    DineInCategoryId = 3,
+                    ParentCategoryId = 1,
+                    CategoryName = "Sub DineIn A",
                 },
-                new DineInMenu
+                new DineInCategory
                 {
-                    DineInMenuId = 4,
-                    ParentMenuId = 1,
-                    MenuName = "Sub DineIn B",
+                    DineInCategoryId = 4,
+                    ParentCategoryId = 1,
+                    CategoryName = "Sub DineIn B",
                 },
-                new DineInMenu
+                new DineInCategory
                 {
-                    DineInMenuId = 5,
-                    ParentMenuId = 2,
-                    MenuName = "Sub DineIn C",
+                    DineInCategoryId = 5,
+                    ParentCategoryId = 2,
+                    CategoryName = "Sub DineIn C",
                 }
             );
         }
 
-        public static void SeedDeliveryMenu(this ModelBuilder modelBuilder)
+        public static void SeedDeliveryCategory(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DeliveryMenu>().HasData(
-                new DeliveryMenu
+            modelBuilder.Entity<DeliveryCategory>().HasData(
+                new DeliveryCategory
                 {
-                    DeliveryMenuId = 1,
-                    MenuName = "Delivery 1",
+                    DeliveryCategoryId = 1,
+                    CategoryName = "Delivery 1",
                 },
-                new DeliveryMenu
+                new DeliveryCategory
                 {
-                    DeliveryMenuId = 2,
-                    MenuName = "Delivery 2",
+                    DeliveryCategoryId = 2,
+                    CategoryName = "Delivery 2",
                 },
-                new DeliveryMenu
+                new DeliveryCategory
                 {
-                    DeliveryMenuId = 3,
-                    ParentMenuId = 1,
-                    MenuName = "Sub Delivery A",
+                    DeliveryCategoryId = 3,
+                    ParentCategoryId = 1,
+                    CategoryName = "Sub Delivery A",
                 },
-                new DeliveryMenu
+                new DeliveryCategory
                 {
-                    DeliveryMenuId = 4,
-                    ParentMenuId = 1,
-                    MenuName = "Sub Delivery B",
+                    DeliveryCategoryId = 4,
+                    ParentCategoryId = 1,
+                    CategoryName = "Sub Delivery B",
                 },
-                new DeliveryMenu
+                new DeliveryCategory
                 {
-                    DeliveryMenuId = 5,
-                    ParentMenuId = 2,
-                    MenuName = "Sub Delivery C",
+                    DeliveryCategoryId = 5,
+                    ParentCategoryId = 2,
+                    CategoryName = "Sub Delivery C",
                 }
             );
         }
@@ -149,8 +149,8 @@ namespace AliceRestaurant.Extensions
                 new Dish
                 {
                     DishId = 1,
-                    DineInMenuId = 1,
-                    DeliveryMenuId = 1,
+                    DineInCategoryId = 1,
+                    DeliveryCategoryId = 1,
                     RestaurantId = 1,
                     DishName = "Dish 1",
                     ShortName = "D1",
@@ -168,8 +168,8 @@ namespace AliceRestaurant.Extensions
                 new Dish
                 {
                     DishId = 2,
-                    DineInMenuId = 2,
-                    DeliveryMenuId = 2,
+                    DineInCategoryId = 2,
+                    DeliveryCategoryId = 2,
                     RestaurantId = 2,
                     DishName = "Dish 2",
                     ShortName = "D2",
@@ -187,8 +187,8 @@ namespace AliceRestaurant.Extensions
                 new Dish
                 {
                     DishId = 3,
-                    DineInMenuId = 3,
-                    DeliveryMenuId = 3,
+                    DineInCategoryId = 3,
+                    DeliveryCategoryId = 3,
                     RestaurantId = 3,
                     DishName = "Dish 3",
                     ShortName = "D3",

@@ -8,14 +8,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AliceRestaurant.Data.Configuration
 {
-    internal class DeliveryConfiguration : IEntityTypeConfiguration<DeliveryMenu>
+    internal class DeliveryConfiguration : IEntityTypeConfiguration<DeliveryCategory>
     {
-        public void Configure(EntityTypeBuilder<DeliveryMenu> builder)
+        public void Configure(EntityTypeBuilder<DeliveryCategory> builder)
         {
             // create self referencing relationship
-            builder.HasOne<DeliveryMenu>(e => e.ParentMenu)
-                .WithMany(d => d.DeliveryMenus)
-                .HasForeignKey(e => e.ParentMenuId);
+            builder.HasOne<DeliveryCategory>(e => e.ParentCategory)
+                .WithMany(d => d.DeliveryCategories)
+                .HasForeignKey(e => e.ParentCategoryId);
         }
     }
 }

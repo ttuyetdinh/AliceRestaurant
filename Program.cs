@@ -18,8 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // add DI
 builder.Services.AddScoped<IDishRepository, DishRepository>();
-builder.Services.AddScoped<IDineInMenuRepository, DineInMenuRepository>();
-builder.Services.AddScoped<IDeliveryMenuRepository, DeliveryMenuRepository>();
+builder.Services.AddScoped<IDineInCategoryRepository, DineInCategoryRepository>();
+builder.Services.AddScoped<IDeliveryCategoryRepository, DeliveryCategoryRepository>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 
 

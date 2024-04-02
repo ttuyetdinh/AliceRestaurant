@@ -9,35 +9,35 @@ using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AliceDelivery.Controllers
+namespace AliceRestaurant.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DeliveryController : ControllerBase
+    public class DineInCategoryController : ControllerBase
     {
-        private readonly IDeliveryMenuRepository _deliveryRepo;
+        private readonly IDineInCategoryRepository _dineInRepo;
         private readonly IMapper _mapper;
 
-        public DeliveryController(IDeliveryMenuRepository deliveryRepo, IMapper mapper)
+        public DineInCategoryController(IDineInCategoryRepository dineInRepo, IMapper mapper)
         {
-            _deliveryRepo = deliveryRepo;
+            _dineInRepo = dineInRepo;
             _mapper = mapper;
         }
 
-        [HttpGet(nameof(GetDeliveryes))]
-        public async Task<IActionResult> GetDeliveryes()
+        [HttpGet(nameof(GetDineInCategoryes))]
+        public async Task<IActionResult> GetDineInCategoryes()
         {
             try
             {
-                var deliveryes = await _deliveryRepo.GetAllAsync();
-                var deliveryesDTO = _mapper.Map<List<DeliveryMenuDTO>>(deliveryes);
+                var dineInes = await _dineInRepo.GetAllAsync();
+                var dineInesDTO = _mapper.Map<List<DineInCategoryDTO>>(dineInes);
 
 
                 return Ok(new ResponseDTO()
                 {
                     StatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
-                    Result = deliveryesDTO
+                    Result = dineInesDTO
                 });
             }
             catch (Exception ex)
@@ -46,30 +46,30 @@ namespace AliceDelivery.Controllers
             }
         }
 
-        [HttpGet(nameof(GetDelivery) + "/{id:int}")]
-        public async Task<IActionResult> GetDelivery(int id)
+        [HttpGet(nameof(GetDineInCategory) + "/{id:int}")]
+        public async Task<IActionResult> GetDineInCategory(int id)
         {
             try
             {
-                var delivery = await _deliveryRepo.GetAsync(e => e.DeliveryMenuId == id);
-                if (delivery == null)
+                var dineIn = await _dineInRepo.GetAsync(e => e.DineInCategoryId == id);
+                if (dineIn == null)
                 {
                     return NotFound(new ResponseDTO()
                     {
                         ErrorMessage = new List<string>() {
-                            "Delivery not found."
+                            "DineInCategory not found."
                         },
                         IsSuccess = false,
                         StatusCode = HttpStatusCode.NotFound
                     });
                 }
-                var deliveryDTO = _mapper.Map<DeliveryMenuDTO>(delivery);
+                var dineInDTO = _mapper.Map<DineInCategoryDTO>(dineIn);
 
                 return Ok(new ResponseDTO()
                 {
                     StatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
-                    Result = deliveryDTO
+                    Result = dineInDTO
                 });
             }
             catch (Exception ex)

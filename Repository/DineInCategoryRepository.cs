@@ -8,25 +8,25 @@ using AliceRestaurant.Repository.IRepository;
 
 namespace AliceRestaurant.Repository
 {
-    public class DeliveryMenuRepository : Repository<DeliveryMenu>, IDeliveryMenuRepository
+    public class DineInCategoryRepository : Repository<DineInCategory>, IDineInCategoryRepository
     {
         private readonly AppDbContext _db;
-        public DeliveryMenuRepository(AppDbContext db) : base(db)
+        public DineInCategoryRepository(AppDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public async Task<DeliveryMenu> UpdateAsync(DeliveryMenu entity)
+        public async Task<DineInCategory> UpdateAsync(DineInCategory entity)
         {
             entity.LastUpdated = DateTime.Now;
-            _db.DeliveryMenus.Update(entity);
+            _db.DineInCategories.Update(entity);
 
             await SaveAsync();
 
             return entity;
         }
 
-        public override Task CreateAsync(DeliveryMenu entity)
+        public override Task CreateAsync(DineInCategory entity)
         {
             if (entity.CreatedOn == default)
             {

@@ -6,8 +6,8 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.Repository.IRepository
 {
-    public interface IDineInMenuRepository : IRepository<DineInMenu>
+    public interface IDineInCategoryRepository : IRepository<DineInCategory>
     {
-        Task<DineInMenu> UpdateAsync(DineInMenu entity);
+        Task<DineInCategory> UpdateAsync(DineInCategory entity);
     }
 }

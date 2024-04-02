@@ -13,8 +13,8 @@ namespace AliceRestaurant.Models
     {
         [Key]
         public int DishId { get; set; }
-        public int DineInMenuId { get; set; } // foreign key
-        public int DeliveryMenuId { get; set; } // foreign key
+        public int DineInCategoryId { get; set; } // foreign key
+        public int DeliveryCategoryId { get; set; } // foreign key
         public int RestaurantId { get; set; } // foreign key
         [Required]
         public string? DishName { get; set; } = "";
@@ -29,8 +29,8 @@ namespace AliceRestaurant.Models
         public DateTime? SellingDate { get; set; } = null;
         public bool? IsAvailable { get; set; } = true;
         public string? ImageUrl { get; set; } = "";
-        public DineInMenu? DineInMenu { get; set; }
-        public DeliveryMenu? DeliveryMenu { get; set; }
+        public DineInCategory? DineInCategory { get; set; }
+        public DeliveryCategory? DeliveryCategory { get; set; }
         public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
 
         public DateTime? LastUpdated { get; set; } = DateTime.Now;
