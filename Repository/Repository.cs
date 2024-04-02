@@ -33,7 +33,7 @@ namespace AliceRestaurant.Repository
             }
         }
 
-        public virtual async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, Pagination? pagination = null)
+        public virtual async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, List<string>? includeProperties = null, Pagination? pagination = null, bool tracked = true)
         {
             try
             {
@@ -41,10 +41,9 @@ namespace AliceRestaurant.Repository
                 int pageSize = pagination?.PageSize ?? 0;
                 int pageNum = pagination?.PageNum ?? 0;
 
-                if (filter != null)
-                {
-                    query = query.Where(filter);
-                }
+                query = !tracked ? query.AsNoTracking() : query;
+
+                query = filter != null ? query.Where(filter) : query;
 
                 if (pageSize > 0 && pageNum > 0)
                 {
@@ -54,7 +53,7 @@ namespace AliceRestaurant.Repository
                 // include properties have relationship with the entity
                 if (includeProperties != null)
                 {
-                    foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    foreach (var includeProperty in includeProperties)
                     {
                         query = query.Include(includeProperty);
                     }
@@ -69,7 +68,7 @@ namespace AliceRestaurant.Repository
             }
         }
 
-        public virtual async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true, string? includeProperties = null)
+        public virtual async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true, List<string>? includeProperties = null)
         {
             try
             {
@@ -81,7 +80,7 @@ namespace AliceRestaurant.Repository
 
                 if (includeProperties != null)
                 {
-                    foreach (var property in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    foreach (var property in includeProperties)
                     {
                         query = query.Include(property);
                     };

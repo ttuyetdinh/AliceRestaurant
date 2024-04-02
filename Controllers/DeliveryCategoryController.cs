@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
+using AliceRestaurant.Models.DTO.DeliveryCategory;
 using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -24,20 +25,21 @@ namespace AliceDelivery.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(nameof(GetDeliveries))]
-        public async Task<IActionResult> GetDeliveries()
+        [HttpGet(nameof(GetAllCategories))]
+        public async Task<IActionResult> GetAllCategories()
         {
             try
             {
-                var deliveries = await _deliveryRepo.GetAllAsync();
-                var deliveryesDTO = _mapper.Map<List<DeliveryCategoryDTO>>(deliveries);
+                // this will get all the subcategories because the model is designed to be self referencing
+                var categories = await _deliveryRepo.GetAllAsync();
+                var categoryDTOs = _mapper.Map<List<DeliveryCategoryDTO>>(categories);
 
 
                 return Ok(new ResponseDTO()
                 {
                     StatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
-                    Result = deliveryesDTO
+                    Result = categoryDTOs
                 });
             }
             catch (Exception ex)
@@ -46,30 +48,31 @@ namespace AliceDelivery.Controllers
             }
         }
 
-        [HttpGet(nameof(GetDelivery) + "/{id:int}")]
-        public async Task<IActionResult> GetDelivery(int id)
+        [HttpGet(nameof(GetCategory) + "/{id:int}")]
+        public async Task<IActionResult> GetCategory(int id)
         {
             try
             {
-                var delivery = await _deliveryRepo.GetAsync(e => e.DeliveryCategoryId == id);
-                if (delivery == null)
+                var includeProperties = new List<string> { "ParentCategory", "DeliveryCategories" };
+                var category = await _deliveryRepo.GetAsync(e => e.DeliveryCategoryId == id, includeProperties: includeProperties);
+                if (category == null)
                 {
                     return NotFound(new ResponseDTO()
                     {
                         ErrorMessage = new List<string>() {
-                            "Delivery not found."
+                            "Category not found."
                         },
                         IsSuccess = false,
                         StatusCode = HttpStatusCode.NotFound
                     });
                 }
-                var deliveryDTO = _mapper.Map<DeliveryCategoryDTO>(delivery);
+                var categoryDTO = _mapper.Map<DeliveryCategoryDTO>(category);
 
                 return Ok(new ResponseDTO()
                 {
                     StatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
-                    Result = deliveryDTO
+                    Result = categoryDTO
                 });
             }
             catch (Exception ex)

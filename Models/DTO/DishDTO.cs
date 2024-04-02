@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AliceRestaurant.Models.DTO.DeliveryCategory;
+using AliceRestaurant.Models.DTO.DineInCategory;
 
 namespace AliceRestaurant.Models.DTO
 {
@@ -23,8 +25,8 @@ namespace AliceRestaurant.Models.DTO
         public DateTime? SellingDate { get; set; }
         public bool? IsAvailable { get; set; }
         public string? ImageUrl { get; set; }
-        public DineInCategory? DineInCategory { get; set; }
-        public DeliveryCategory? DeliveryCategory { get; set; }
-        public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
+        public DineInCategoryDTO? DineInCategory { get; set; }
+        public DeliveryCategoryDTO? DeliveryCategory { get; set; }
+        public ICollection<RestaurantDishDTO>? RestaurantDishes { get; set; }
     }
 }

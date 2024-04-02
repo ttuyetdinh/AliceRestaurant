@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
+using AliceRestaurant.Models.DTO.DeliveryCategory;
+using AliceRestaurant.Models.DTO.DineInCategory;
 using AutoMapper;
 
 namespace AliceRestaurant
@@ -17,8 +19,24 @@ namespace AliceRestaurant
                 config.CreateMap<Dish, DishDTO>().ReverseMap();
                 config.CreateMap<Restaurant, RestaurantDTO>().ReverseMap();
                 config.CreateMap<RestaurantDish, RestaurantDishDTO>().ReverseMap();
-                config.CreateMap<DeliveryCategory, DeliveryCategoryDTO>().ReverseMap();
-                config.CreateMap<DineInCategory, DineInCategoryDTO>().ReverseMap();
+
+                // For DeliveryCategory
+                config.CreateMap<DeliveryCategory, DeliveryCategoryDTO>()
+                    .ForMember(dest => dest.CategoryId, otp => otp.MapFrom(src => src.DeliveryCategoryId))
+                    .ForMember(dest => dest.ParentCategory, otp => otp.MapFrom(src => src.ParentCategory))
+                    .ForMember(dest => dest.SubCategories, otp => otp.MapFrom(src => src.DeliveryCategories));
+
+                config.CreateMap<DeliveryCategory, DeliveryCategoryParentDTO>()
+                    .ForMember(dest => dest.CategoryId, otp => otp.MapFrom(src => src.DeliveryCategoryId));
+
+                // For DiningCategory
+                config.CreateMap<DineInCategory, DineInCategoryDTO>()
+                    .ForMember(dest => dest.CategoryId, otp => otp.MapFrom(src => src.DineInCategoryId))
+                    .ForMember(dest => dest.ParentCategory, otp => otp.MapFrom(src => src.ParentCategory))
+                    .ForMember(dest => dest.SubCategories, otp => otp.MapFrom(src => src.DineInCategories));
+
+                config.CreateMap<DineInCategory, DineInCategoryParentDTO>()
+                    .ForMember(dest => dest.CategoryId, otp => otp.MapFrom(src => src.DineInCategoryId));
             });
 
             return mappingConfig;
