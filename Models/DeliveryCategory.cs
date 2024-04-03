@@ -14,7 +14,7 @@ namespace AliceRestaurant.Models
         [Key]
         public int DeliveryCategoryId { get; set; }
         public int? ParentCategoryId { get; set; } //  foreign key to self
-        public string? CategoryName { get; set; } = "";
+        public string? CategoryName { get; set; }
         public DeliveryCategory? ParentCategory { get; set; }
         public ICollection<DeliveryCategory>? DeliveryCategories { get; set; }
         public ICollection<Dish>? Dishes { get; set; }

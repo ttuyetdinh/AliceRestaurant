@@ -11,7 +11,7 @@ namespace AliceRestaurant.Models
     {
         [Key]
         public int RestaurantId { get; set; }
-        public string? Name { get; set; } = "";
+        public string? Name { get; set; }
         public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
 
         public DateTime? LastUpdated { get; set; }
