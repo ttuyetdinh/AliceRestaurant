@@ -16,6 +16,7 @@ namespace AliceRestaurant.Extensions
             modelBuilder.SeedRestaurant();
             modelBuilder.SeedDish();
             modelBuilder.SeedRestaurantDish();
+            modelBuilder.SeedDropDown();
         }
         public static void SeedDineInCategory(this ModelBuilder modelBuilder)
         {
@@ -136,8 +137,8 @@ namespace AliceRestaurant.Extensions
                 new Dish
                 {
                     DishId = 1,
-                    DineInCategoryId = 1,
-                    DeliveryCategoryId = 1,
+                    DineInCategoryId = 3,
+                    DeliveryCategoryId = 3,
                     DishName = "Dish 1",
                     ShortName = "D1",
                     EnglishName = "Dish One",
@@ -153,8 +154,8 @@ namespace AliceRestaurant.Extensions
                 new Dish
                 {
                     DishId = 2,
-                    DineInCategoryId = 2,
-                    DeliveryCategoryId = 2,
+                    DineInCategoryId = 4,
+                    DeliveryCategoryId = 4,
                     DishName = "Dish 2",
                     ShortName = "D2",
                     EnglishName = "Dish Two",
@@ -170,8 +171,8 @@ namespace AliceRestaurant.Extensions
                 new Dish
                 {
                     DishId = 3,
-                    DineInCategoryId = 3,
-                    DeliveryCategoryId = 3,
+                    DineInCategoryId = 5,
+                    DeliveryCategoryId = 5,
                     DishName = "Dish 3",
                     ShortName = "D3",
                     EnglishName = "Dish Three",
@@ -222,6 +223,50 @@ namespace AliceRestaurant.Extensions
             });
 
             modelBuilder.Entity<RestaurantDish>().HasData(seedRestaurantDish);
+        }
+
+        public static void SeedDropDown(this ModelBuilder modelBuilder)
+        {
+            var seedDropDown = new List<Dropdown>(){
+                new Dropdown
+                {
+                    DropdownId = 1,
+                    Name = "Core",
+                    Value = "Core",
+                    Type = "DishType",
+                    Module = "DineIn",
+                    Description = "A core dish in Dine Menu",
+                },
+                new Dropdown
+                {
+                    DropdownId = 2,
+                    Name = "Seasonal",
+                    Value = "Seasonal",
+                    Type = "DishType",
+                    Module = "DineIn",
+                    Description = "A seasonal dish in Dine Menu",
+                },
+                new Dropdown
+                {
+                    DropdownId = 3,
+                    Name = "Core",
+                    Value = "Core",
+                    Type = "DishType",
+                    Module = "Delivery",
+                    Description = "A core dish in Dine Menu",
+                },
+                new Dropdown
+                {
+                    DropdownId = 4,
+                    Name = "Seasonal",
+                    Value = "Seasonal",
+                    Type = "DishType",
+                    Module = "Delivery",
+                    Description = "A seasonal dish in Dine Menu",
+                },
+            };
+
+            modelBuilder.Entity<Dropdown>().HasData(seedDropDown);
         }
     }
 }

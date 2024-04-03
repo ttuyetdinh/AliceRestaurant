@@ -23,6 +23,7 @@ namespace AliceRestaurant.Data
         public DbSet<RestaurantDish> RestaurantDishes { get; set; }
         public DbSet<DineInCategory> DineInCategories { get; set; }
         public DbSet<DeliveryCategory> DeliveryCategories { get; set; }
+        public DbSet<Dropdown> Dropdowns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

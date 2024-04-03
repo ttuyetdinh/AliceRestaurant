@@ -10,7 +10,7 @@ using AliceRestaurant.Models.DTO.DineInCategory;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace AliceRestaurant
+namespace AliceRestaurant.MapperConfig
 {
     public class MappingConfig
     {
@@ -20,6 +20,7 @@ namespace AliceRestaurant
             {
                 config.ApplyDishMapping();
                 config.ApplyRestaurantMapping();
+                config.ApplyDropdownMapping();
 
                 // For DeliveryCategory
                 config.CreateMap<DeliveryCategory, DeliveryCategoryDTO>()

@@ -12,6 +12,7 @@ namespace AliceRestaurant.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Dropdown> entity)
         {
+            entity.Property(b => b.IsActive).HasDefaultValue(true);
         }
     }
 }
