@@ -1,6 +1,7 @@
 using AliceRestaurant;
 using AliceRestaurant.Data;
 using AliceRestaurant.Extensions;
+using AliceRestaurant.MapperConfig;
 using AliceRestaurant.Repository;
 using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IDishRepository, DishRepository>();
 builder.Services.AddScoped<IDineInCategoryRepository, DineInCategoryRepository>();
 builder.Services.AddScoped<IDeliveryCategoryRepository, DeliveryCategoryRepository>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+builder.Services.AddScoped<IDropdownRepository, DropdownRepository>();
 
 
 

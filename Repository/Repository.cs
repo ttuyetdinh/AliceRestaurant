@@ -20,12 +20,14 @@ namespace AliceRestaurant.Repository
             dbSet = _db.Set<T>();
         }
 
-        public virtual async Task CreateAsync(T entity)
+        public virtual async Task<T> CreateAsync(T entity)
         {
             try
             {
                 await dbSet.AddAsync(entity);
                 await SaveAsync();
+
+                return entity;
             }
             catch (Exception)
             {
@@ -94,12 +96,14 @@ namespace AliceRestaurant.Repository
             }
         }
 
-        public virtual async Task RemoveAsync(T entity)
+        public virtual async Task<T> RemoveAsync(T entity)
         {
             try
             {
                 dbSet.Remove(entity);
                 await SaveAsync();
+
+                return entity;
             }
             catch (Exception)
             {

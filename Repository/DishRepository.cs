@@ -28,14 +28,14 @@ namespace AliceRestaurant.Repository
             return entity;
         }
 
-        public override Task CreateAsync(Dish entity)
+        public override async Task<Dish> CreateAsync(Dish entity)
         {
             if (entity.CreatedOn == default)
             {
                 entity.CreatedOn = DateTime.Now;
                 entity.LastUpdated = DateTime.Now;
             }
-            return base.CreateAsync(entity);
+            return await base.CreateAsync(entity);
         }
 
         public override async Task<List<Dish>> GetAllAsync(Expression<Func<Dish, bool>>? filter = null, List<string>? includeProperties = null, Pagination? pagination = null, bool tracked = true)

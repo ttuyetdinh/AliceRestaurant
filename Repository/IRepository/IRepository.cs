@@ -11,8 +11,8 @@ namespace AliceRestaurant.Repository.IRepository
     {
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, List<string>? includeProperties = null, Pagination? pagination = null, bool tracked = true);
         Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true, List<string>? includeProperties = null);
-        Task CreateAsync(T entity);
-        Task RemoveAsync(T entity);
+        Task<T> CreateAsync(T entity);
+        Task<T> RemoveAsync(T entity);
         Task SaveAsync();
     }
 }

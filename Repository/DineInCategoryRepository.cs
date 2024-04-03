@@ -26,14 +26,14 @@ namespace AliceRestaurant.Repository
             return entity;
         }
 
-        public override Task CreateAsync(DineInCategory entity)
+        public override async Task<DineInCategory> CreateAsync(DineInCategory entity)
         {
             if (entity.CreatedOn == default)
             {
                 entity.CreatedOn = DateTime.Now;
                 entity.LastUpdated = DateTime.Now;
             }
-            return base.CreateAsync(entity);
+            return await base.CreateAsync(entity);
         }
     }
 }
