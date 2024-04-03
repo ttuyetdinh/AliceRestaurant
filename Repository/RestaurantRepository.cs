@@ -126,5 +126,61 @@ namespace AliceRestaurant.Repository
             }
         }
 
+        public async Task<List<Dish>> GetRestaurantDishesAsync(
+            Expression<Func<Restaurant, bool>>? resFilter = null,
+            Expression<Func<RestaurantDish, bool>>? rdFilter = null,
+            bool tracked = true, List<string>? includeProperties = null)
+        {
+            try
+            {
+                int resId = await GetRestaurantId(resFilter);
+                if (resId == 0)
+                {
+                    return null;
+                }
+
+                IQueryable<RestaurantDish> query = _db.RestaurantDishes;
+
+                query = !tracked ? query.AsNoTracking() : query;
+
+                query = rdFilter != null ? query.Where(rdFilter) : query;
+
+                if (includeProperties != null)
+                {
+                    foreach (var property in includeProperties)
+                    {
+                        query = query.Include($"Dish.{property}");
+                    }
+                }
+
+                var dishes = await query.Where(e => e.RestaurantId == resId)
+                                .Select(e => e.Dish)
+                                .ToListAsync();
+                return dishes;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // helper method
+        private async Task<int> GetRestaurantId(Expression<Func<Restaurant, bool>>? resFilter = null)
+        {
+            try
+            {
+                IQueryable<Restaurant> resQuery = dbSet;
+
+                resQuery = resFilter != null ? resQuery.Where(resFilter) : resQuery;
+
+                var restaurant = await resQuery.FirstOrDefaultAsync();
+                return restaurant?.RestaurantId ?? 0;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

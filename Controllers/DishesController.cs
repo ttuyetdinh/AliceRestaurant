@@ -14,19 +14,20 @@ namespace AliceRestaurant.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DishController : ControllerBase
+    public class DishesController : ControllerBase
     {
         private readonly IDishRepository _dishRepo;
         private readonly IMapper _mapper;
 
-        public DishController(IDishRepository dishRepo, IMapper mapper)
+        public DishesController(IDishRepository dishRepo, IMapper mapper)
         {
             _dishRepo = dishRepo;
             _mapper = mapper;
         }
 
-        [HttpGet(nameof(GetDishes))]
-        public async Task<IActionResult> GetDishes()
+        [HttpGet]
+        public async Task<IActionResult> GetDishes(
+            [FromQuery] string[] restaurants)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace AliceRestaurant.Controllers
         }
 
 
-        [HttpGet(nameof(GetDish) + "/{id:int}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetDish(int id)
         {
             try
