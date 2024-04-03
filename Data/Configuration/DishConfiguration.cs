@@ -10,16 +10,16 @@ namespace AliceRestaurant.Data.Configuration
 {
     internal class DishConfiguration : IEntityTypeConfiguration<Dish>
     {
-        public void Configure(EntityTypeBuilder<Dish> builder)
+        public void Configure(EntityTypeBuilder<Dish> entity)
         {
 
-            builder.Property(d => d.Price).HasColumnType("decimal(18,2)");
+            entity.Property(d => d.Price).HasColumnType("decimal(18,2)");
 
-            builder.HasOne<DineInCategory>(e => e.DineInCategory)
+            entity.HasOne<DineInCategory>(e => e.DineInCategory)
                 .WithMany(d => d.Dishes)
                 .HasForeignKey(e => e.DineInCategoryId);
 
-            builder.HasOne<DeliveryCategory>(e => e.DeliveryCategory)
+            entity.HasOne<DeliveryCategory>(e => e.DeliveryCategory)
                 .WithMany(d => d.Dishes)
                 .HasForeignKey(e => e.DeliveryCategoryId);
         }

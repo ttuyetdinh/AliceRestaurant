@@ -10,9 +10,9 @@ namespace AliceRestaurant.Data.Configuration
 {
     internal class DineInCategoryConfiguration : IEntityTypeConfiguration<DineInCategory>
     {
-        public void Configure(EntityTypeBuilder<DineInCategory> builder)
+        public void Configure(EntityTypeBuilder<DineInCategory> entity)
         {
-            builder.HasOne<DineInCategory>(e => e.ParentCategory)
+            entity.HasOne<DineInCategory>(e => e.ParentCategory)
                 .WithMany(d => d.DineInCategories)
                 .HasForeignKey(e => e.ParentCategoryId);
         }

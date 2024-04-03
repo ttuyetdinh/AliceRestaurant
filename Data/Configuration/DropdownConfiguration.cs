@@ -8,11 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AliceRestaurant.Data.Configuration
 {
-    public class RestaurantDishConfiguration : IEntityTypeConfiguration<RestaurantDish>
+    public class DropdownConfiguration : IEntityTypeConfiguration<Dropdown>
     {
-        public void Configure(EntityTypeBuilder<RestaurantDish> entity)
+        public void Configure(EntityTypeBuilder<Dropdown> entity)
         {
-            entity.HasKey(rd => new { rd.DishId, rd.RestaurantId });
         }
     }
 }

@@ -10,10 +10,10 @@ namespace AliceRestaurant.Data.Configuration
 {
     internal class DeliveryConfiguration : IEntityTypeConfiguration<DeliveryCategory>
     {
-        public void Configure(EntityTypeBuilder<DeliveryCategory> builder)
+        public void Configure(EntityTypeBuilder<DeliveryCategory> entity)
         {
             // create self referencing relationship
-            builder.HasOne<DeliveryCategory>(e => e.ParentCategory)
+            entity.HasOne<DeliveryCategory>(e => e.ParentCategory)
                 .WithMany(d => d.DeliveryCategories)
                 .HasForeignKey(e => e.ParentCategoryId);
         }
