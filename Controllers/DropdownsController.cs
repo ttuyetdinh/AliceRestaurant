@@ -12,18 +12,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AliceRestaurant.Controllers
 {
+    /// <summary>
+    /// Controller for managing dropdowns.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class DropdownsController : ControllerBase
     {
         private readonly IDropdownRepository _dropdownRepo;
         private readonly IMapper _mapper;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DropdownsController"/> class.
+        /// </summary>
+        /// <param name="dropdownRepo">The dropdown repository.</param>
+        /// <param name="mapper">The mapper.</param>
         public DropdownsController(IDropdownRepository dropdownRepo, IMapper mapper)
         {
             _dropdownRepo = dropdownRepo;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets the dropdowns based on the specified module and type.
+        /// </summary>
+        /// <param name="module">The module name.</param>
+        /// <param name="type">The dropdown type.</param>
+        /// <returns>The list of dropdowns.</returns>
         [HttpGet]
         public async Task<IActionResult> GetDropdowns([FromQuery] string module = null, [FromQuery] string type = null)
         {
@@ -49,6 +64,11 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the dropdown with the specified ID.
+        /// </summary>
+        /// <param name="id">The dropdown ID.</param>
+        /// <returns>The dropdown.</returns>
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetDropdown(int id)
         {
@@ -78,21 +98,16 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new dropdown.
+        /// </summary>
+        /// <param name="dropdownDTO">The dropdown data.</param>
+        /// <returns>The created dropdown.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateDropdown([FromBody] DropdownCreateDTO dropdownDTO)
         {
             try
             {
-                if (dropdownDTO == null)
-                {
-                    return BadRequest(new ResponseDTO
-                    {
-                        ErrorMessage = new List<string>() { "Dropdown object is null" },
-                        IsSuccess = false,
-                        StatusCode = HttpStatusCode.BadRequest
-                    });
-                }
-
                 var dropdown = _mapper.Map<Dropdown>(dropdownDTO);
                 var response = await _dropdownRepo.CreateAsync(dropdown);
 
@@ -109,6 +124,12 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates the dropdown with the specified ID.
+        /// </summary>
+        /// <param name="id">The dropdown ID.</param>
+        /// <param name="dropdownDTO">The updated dropdown data.</param>
+        /// <returns>The updated dropdown.</returns>
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateDropdown(int id, [FromBody] DropdownUpdateDTO dropdownDTO)
         {
@@ -141,6 +162,11 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes the dropdown with the specified ID.
+        /// </summary>
+        /// <param name="id">The dropdown ID.</param>
+        /// <returns>The deleted dropdown.</returns>
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteDropdown(int id)
         {
@@ -173,13 +199,19 @@ namespace AliceRestaurant.Controllers
         }
 
         // ultilities methos
-        private ResponseDTO ErrorResponse(Exception ex)
+
+        /// <summary>
+        /// Creates an error response for the specified exception.
+        /// </summary>
+        /// <param name="ex">The exception.</param>
+        /// <returns>The error response.</returns>
+        private ResponseDTO ErrorResponse(Exception ex = null, string customEx = null)
         {
             return new ResponseDTO
             {
                 ErrorMessage = new List<string>() {
-                    "An error occurred while processing your request.",
-                    ex.InnerException != null ? ex.InnerException.Message : ex.Message
+                    customEx ?? "An error occurred while processing your request.",
+                    ex == null ? null: ex.InnerException != null ? ex.InnerException.Message : ex.Message
                 },
                 IsSuccess = false,
                 StatusCode = HttpStatusCode.BadRequest
