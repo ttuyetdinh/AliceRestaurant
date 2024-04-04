@@ -18,6 +18,8 @@ namespace AliceRestaurant.MapperConfig
                     opt => opt.MapFrom(src => src.RestaurantDishes.Select(rd => rd.Dish).ToList())
                 );
 
+            config.CreateMap<RestaurantCreateUpdateDTO, Restaurant>();
+
             config.CreateMap<Dish, RestaurantDishDTO>();
             config.CreateMap<DineInCategory, RestaurantDineInCategoryDTO>()
                 .ForMember(
