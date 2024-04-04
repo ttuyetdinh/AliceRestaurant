@@ -1,18 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using AliceRestaurant.Models.DTO;
-using Microsoft.EntityFrameworkCore;
 
-namespace AliceRestaurant.Models
+namespace AliceRestaurant.Models.DTO.Dish
 {
-    public class Dish
+    public class DishCreateDTO
     {
-        [Key]
-        public int DishId { get; set; }
+
         public int? DineInCategoryId { get; set; } // foreign key
         public int? DeliveryCategoryId { get; set; } // foreign key
         [Required]
@@ -28,11 +24,5 @@ namespace AliceRestaurant.Models
         public DateTime? SellingDate { get; set; }
         public bool? IsAvailable { get; set; }
         public string? ImageUrl { get; set; }
-        public DineInCategory? DineInCategory { get; set; }
-        public DeliveryCategory? DeliveryCategory { get; set; }
-        public ICollection<RestaurantDish>? RestaurantDishes { get; set; }
-
-        public DateTime? LastUpdated { get; set; }
-        public DateTime? CreatedOn { get; set; }
     }
 }
