@@ -5,34 +5,34 @@ using System.Net;
 using System.Threading.Tasks;
 using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
-using AliceRestaurant.Models.DTO.DeliveryCategoryDTO;
+using AliceRestaurant.Models.DTO.DineInCategory;
 using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AliceDelivery.Controllers
+namespace AliceRestaurant.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class DeliveryCategoryController : ControllerBase
+    [Route("api/dinein-categories")]
+    public class DineInCategoriesController : ControllerBase
     {
-        private readonly IDeliveryCategoryRepository _deliveryRepo;
+        private readonly IDineInCategoryRepository _dineInRepo;
         private readonly IMapper _mapper;
 
-        public DeliveryCategoryController(IDeliveryCategoryRepository deliveryRepo, IMapper mapper)
+        public DineInCategoriesController(IDineInCategoryRepository dineInRepo, IMapper mapper)
         {
-            _deliveryRepo = deliveryRepo;
+            _dineInRepo = dineInRepo;
             _mapper = mapper;
         }
 
-        [HttpGet(nameof(GetAllCategories))]
+        [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
             try
             {
                 // this will get all the subcategories because the model is designed to be self referencing
-                var categories = await _deliveryRepo.GetAllAsync();
-                var categoryDTOs = _mapper.Map<List<DeliveryCategoryDTO>>(categories);
+                var categories = await _dineInRepo.GetAllAsync();
+                var categoryDTOs = _mapper.Map<List<DineInCategoryDTO>>(categories);
 
 
                 return Ok(new ResponseDTO()
@@ -48,13 +48,13 @@ namespace AliceDelivery.Controllers
             }
         }
 
-        [HttpGet(nameof(GetCategory) + "/{id:int}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCategory(int id)
         {
             try
             {
-                var includeProperties = new List<string> { "ParentCategory", "DeliveryCategories" };
-                var category = await _deliveryRepo.GetAsync(e => e.DeliveryCategoryId == id, includeProperties: includeProperties);
+                var includeProperties = new List<string> { "ParentCategory", "DineInCategories" };
+                var category = await _dineInRepo.GetAsync(e => e.DineInCategoryId == id, includeProperties: includeProperties);
                 if (category == null)
                 {
                     return NotFound(new ResponseDTO()
@@ -66,7 +66,7 @@ namespace AliceDelivery.Controllers
                         StatusCode = HttpStatusCode.NotFound
                     });
                 }
-                var categoryDTO = _mapper.Map<DeliveryCategoryDTO>(category);
+                var categoryDTO = _mapper.Map<DineInCategoryDTO>(category);
 
                 return Ok(new ResponseDTO()
                 {

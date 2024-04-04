@@ -5,6 +5,7 @@ using AliceRestaurant.MapperConfig;
 using AliceRestaurant.Repository;
 using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -34,7 +35,12 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // add authentication with JWT
 builder.AddAppAuthentication();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RouteTokenTransformerConvention(
+                                new LowercaseControllerParameterTransformer()));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -52,6 +58,8 @@ builder.Services.AddCors(option =>
             .AllowAnyHeader();
     });
 });
+
+
 
 var app = builder.Build();
 

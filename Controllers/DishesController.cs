@@ -83,6 +83,8 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+        [HttpPost]
+
         // ultilities methos
         private ResponseDTO ErrorResponse(Exception ex)
         {

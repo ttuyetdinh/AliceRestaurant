@@ -19,7 +19,7 @@ namespace AliceRestaurant.Controllers
             _config = config;
         }
 
-        [HttpGet("ApiDocument")]
+        [HttpGet]
         public IActionResult ApiDocument()
         {
             try
