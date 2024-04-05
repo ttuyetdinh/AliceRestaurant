@@ -20,12 +20,19 @@ namespace AliceRestaurant.Repository
 
         public async Task<Dish> UpdateAsync(Dish entity)
         {
-            entity.LastUpdated = DateTime.Now;
-            _db.Dishes.Update(entity);
+            try
+            {
+                entity.LastUpdated = DateTime.Now;
+                _db.Dishes.Update(entity);
 
-            await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
-            return entity;
+                return entity;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         public override async Task<Dish> CreateAsync(Dish entity)
