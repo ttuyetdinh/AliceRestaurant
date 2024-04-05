@@ -9,5 +9,6 @@ namespace AliceRestaurant.Repository.IRepository
     public interface IDineInCategoryRepository : IRepository<DineInCategory>
     {
         Task<DineInCategory> UpdateAsync(DineInCategory entity);
+        Task<DineInCategory> GetLastCategoryAsync();
     }
 }

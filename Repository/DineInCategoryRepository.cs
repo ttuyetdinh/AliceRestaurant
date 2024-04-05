@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AliceRestaurant.Data;
 using AliceRestaurant.Models;
 using AliceRestaurant.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace AliceRestaurant.Repository
 {
@@ -34,6 +35,11 @@ namespace AliceRestaurant.Repository
                 entity.LastUpdated = DateTime.Now;
             }
             return await base.CreateAsync(entity);
+        }
+
+        public async Task<DineInCategory> GetLastCategoryAsync()
+        {
+            return await _db.DineInCategories.OrderByDescending(u => u.DineInCategoryId).FirstOrDefaultAsync();
         }
     }
 }
