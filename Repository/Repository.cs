@@ -25,7 +25,7 @@ namespace AliceRestaurant.Repository
             try
             {
                 await dbSet.AddAsync(entity);
-                await SaveAsync();
+                await _db.SaveChangesAsync();
 
                 return entity;
             }
@@ -101,7 +101,7 @@ namespace AliceRestaurant.Repository
             try
             {
                 dbSet.Remove(entity);
-                await SaveAsync();
+                await _db.SaveChangesAsync();
 
                 return entity;
             }

@@ -23,7 +23,7 @@ namespace AliceRestaurant.Repository
             entity.LastUpdated = DateTime.Now;
             _db.Dishes.Update(entity);
 
-            await SaveAsync();
+            await _db.SaveChangesAsync();
 
             return entity;
         }
