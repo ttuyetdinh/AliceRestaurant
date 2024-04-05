@@ -10,5 +10,6 @@ namespace AliceRestaurant.Repository.IRepository
     public interface IDeliveryCategoryRepository : IRepository<DeliveryCategory>
     {
         Task<DeliveryCategory> UpdateAsync(DeliveryCategory entity);
+        Task<DeliveryCategory> GetLastCategoryAsync();
     }
 }

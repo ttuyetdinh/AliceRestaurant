@@ -81,6 +81,142 @@ namespace AliceDelivery.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory([FromBody] DeliveryCategoryCUDTO deliveryCatDTO)
+        {
+            try
+            {
+                var errors = new List<string>();
+                if (deliveryCatDTO.ParentCategoryId != null)
+                {
+                    var lastCategory = await _deliveryRepo.GetLastCategoryAsync();
+                    if (lastCategory.DeliveryCategoryId + 1 == deliveryCatDTO.ParentCategoryId)
+                    {
+                        return BadRequest(new ResponseDTO()
+                        {
+                            ErrorMessage = new List<string>() { "Parent category can't be the same with category" },
+                            IsSuccess = false,
+                            StatusCode = HttpStatusCode.BadRequest
+                        });
+                    }
+
+                    var parentCat = await _deliveryRepo.GetAsync(e => e.DeliveryCategoryId == deliveryCatDTO.ParentCategoryId);
+                    if (parentCat == null)
+                    {
+                        return NotFound(new ResponseDTO()
+                        {
+                            ErrorMessage = new List<string>() { "Delivery parent category is not found." },
+                            IsSuccess = false,
+                            StatusCode = HttpStatusCode.NotFound
+                        });
+                    }
+                }
+
+                var category = _mapper.Map<DeliveryCategory>(deliveryCatDTO);
+                var response = await _deliveryRepo.CreateAsync(category);
+
+                return Ok(new ResponseDTO()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = _mapper.Map<DeliveryCategoryDTO>(category)
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorResponse(ex));
+            }
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] DeliveryCategoryCUDTO deliveryCatDTO)
+        {
+            try
+            {
+                var errors = new List<string>();
+                var category = await _deliveryRepo.GetAsync(e => e.DeliveryCategoryId == id);
+                if (category == null)
+                {
+                    errors.Add("Delivery category is not found.");
+                }
+
+                if (deliveryCatDTO.ParentCategoryId != null)
+                {
+                    if (deliveryCatDTO.ParentCategoryId == id)
+                    {
+                        return BadRequest(new ResponseDTO()
+                        {
+                            ErrorMessage = new List<string>() { "Parent category can't be the same with category" },
+                            IsSuccess = false,
+                            StatusCode = HttpStatusCode.BadRequest
+                        });
+                    }
+
+                    var parentCat = await _deliveryRepo.GetAsync(e => e.DeliveryCategoryId == deliveryCatDTO.ParentCategoryId);
+                    if (parentCat == null)
+                    {
+                        errors.Add("Delivery parent category is not found.");
+                    }
+                }
+                if (errors.Count > 0)
+                {
+                    return NotFound(new ResponseDTO()
+                    {
+                        ErrorMessage = errors,
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound
+                    });
+                }
+
+                _mapper.Map(deliveryCatDTO, category);
+                var response = await _deliveryRepo.UpdateAsync(category);
+
+                return Ok(new ResponseDTO()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = _mapper.Map<DeliveryCategoryDTO>(category)
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorResponse(ex));
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            try
+            {
+                var category = await _deliveryRepo.GetAsync(e => e.DeliveryCategoryId == id);
+                if (category == null)
+                {
+                    return NotFound(new ResponseDTO()
+                    {
+                        ErrorMessage = new List<string>() {
+                            "Category not found."
+                        },
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound
+                    });
+                }
+
+                var response = await _deliveryRepo.RemoveAsync(category);
+
+                return Ok(new ResponseDTO()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = category
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorResponse(ex));
+            }
+        }
+
         // ultilities methos
         private ResponseDTO ErrorResponse(Exception ex)
         {
