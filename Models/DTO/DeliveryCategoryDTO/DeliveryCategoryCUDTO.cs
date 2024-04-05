@@ -1,0 +1,18 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AliceRestaurant.Models.DTO.DeliveryCategoryDTO
+{
+    // create a cateogry with self referencing
+
+    public class DeliveryCategoryCUDTO
+    {
+        public int? ParentCategoryId { get; set; }
+        [Required]
+        public string? CategoryName { get; set; } = "";
+    }
+}
