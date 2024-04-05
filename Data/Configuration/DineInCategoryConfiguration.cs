@@ -14,7 +14,8 @@ namespace AliceRestaurant.Data.Configuration
         {
             entity.HasOne<DineInCategory>(e => e.ParentCategory)
                 .WithMany(d => d.DineInCategories)
-                .HasForeignKey(e => e.ParentCategoryId);
+                .HasForeignKey(e => e.ParentCategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

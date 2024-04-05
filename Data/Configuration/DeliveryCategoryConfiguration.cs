@@ -15,7 +15,9 @@ namespace AliceRestaurant.Data.Configuration
             // create self referencing relationship
             entity.HasOne<DeliveryCategory>(e => e.ParentCategory)
                 .WithMany(d => d.DeliveryCategories)
-                .HasForeignKey(e => e.ParentCategoryId);
+                .HasForeignKey(e => e.ParentCategoryId)
+                // can use cascade because SQL Server does not support cascade delete for self referencing
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
