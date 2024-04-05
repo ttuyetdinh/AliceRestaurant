@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading.Tasks;
 using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
-using AliceRestaurant.Models.DTO.Dish;
 using AliceRestaurant.Models.DTO.RestaurantDTO;
 using AliceRestaurant.Repository.IRepository;
 using AutoMapper;
@@ -22,7 +21,6 @@ namespace AliceRestaurant.Controllers
     public class RestaurantsController : ControllerBase
     {
         private readonly IRestaurantRepository _restaurantRepo;
-        private readonly IDishRepository _dishRepo;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -31,11 +29,10 @@ namespace AliceRestaurant.Controllers
         /// <param name="restaurantRepo">The restaurant repository.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="dishRepo">The dish repository.</param>
-        public RestaurantsController(IRestaurantRepository restaurantRepo, IMapper mapper, IDishRepository dishRepo)
+        public RestaurantsController(IRestaurantRepository restaurantRepo, IMapper mapper)
         {
             _restaurantRepo = restaurantRepo;
             _mapper = mapper;
-            _dishRepo = dishRepo;
         }
 
         /// <summary>

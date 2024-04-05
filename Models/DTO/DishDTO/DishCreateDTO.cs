@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AliceRestaurant.Models.DTO.Dish
+namespace AliceRestaurant.Models.DTO.DishDTO
 {
     public class DishCreateDTO
     {

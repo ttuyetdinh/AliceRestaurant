@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AliceRestaurant.Models.DTO.DineInCategory
+namespace AliceRestaurant.Models.DTO.DineInCategoryDTO
 {
     public class DineInCategoryParentDTO
     {
