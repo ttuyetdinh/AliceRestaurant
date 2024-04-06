@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using AliceRestaurant.Models;
@@ -40,15 +41,21 @@ namespace AliceRestaurant.Controllers
         /// <param name="type">The dropdown type.</param>
         /// <returns>The list of dropdowns.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetDropdowns([FromQuery] string module = null, [FromQuery] string type = null)
+        public async Task<IActionResult> GetDropdowns(
+            [FromQuery] string module = null,
+            [FromQuery] string type = null,
+            [FromQuery] string activeStatus = null)
         {
             try
             {
-                var dropdowns = await _dropdownRepo.GetAllAsync(u =>
-                                (string.IsNullOrEmpty(module) || u.Module.ToLower().Equals(module.ToLower()))
-                                && (string.IsNullOrEmpty(type) || u.Type.ToLower().Equals(type.ToLower()))
-                                && u.IsActive == true);
+                bool.TryParse(activeStatus, out var status);
 
+                Expression<Func<Dropdown, bool>> filter = u =>
+                    (string.IsNullOrEmpty(module) || u.Module.ToLower().Equals(module.ToLower()))
+                    && (string.IsNullOrEmpty(type) || u.Type.ToLower().Equals(type.ToLower()))
+                    && (string.IsNullOrEmpty(activeStatus) || u.IsActive == status);
+
+                var dropdowns = await _dropdownRepo.GetAllAsync(filter);
                 var dropdownsDTO = _mapper.Map<List<DropdownDTO>>(dropdowns);
 
                 return Ok(new ResponseDTO()
