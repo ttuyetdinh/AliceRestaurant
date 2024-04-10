@@ -33,7 +33,8 @@ bld/
 [Ll]ogs/
 
 # For appsetings.json
-appsettings.json
+appsettings_local.json
+appsettings_uat.json
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
