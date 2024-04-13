@@ -24,6 +24,7 @@ builder.Services.AddScoped<IDineInCategoryRepository, DineInCategoryRepository>(
 builder.Services.AddScoped<IDeliveryCategoryRepository, DeliveryCategoryRepository>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 builder.Services.AddScoped<IDropdownRepository, DropdownRepository>();
+builder.Services.AddScoped<IRestaurantDishRepository, RestaurantDishRepository>();
 
 
 

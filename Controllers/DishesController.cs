@@ -20,14 +20,18 @@ namespace AliceRestaurant.Controllers
         private readonly IDishRepository _dishRepo;
         private readonly IDineInCategoryRepository _dineInCatRepo;
         private readonly IDeliveryCategoryRepository _deliveryCatRepo;
+        private readonly IRestaurantRepository _restaurantRepo;
+        private readonly IRestaurantDishRepository _restaurantDishRepo;
         private readonly IMapper _mapper;
 
-        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo)
+        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo, IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo)
         {
             _dishRepo = dishRepo;
             _mapper = mapper;
             _dineInCatRepo = dineInCatRepo;
             _deliveryCatRepo = deliveryCatRepo;
+            _restaurantRepo = restaurantRepo;
+            _restaurantDishRepo = restaurantDishRepo;
         }
 
 
@@ -101,6 +105,45 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+        [HttpGet("{id:int}/restaurants")]
+        public async Task<IActionResult> GetDishRestaurants(int id)
+        {
+            try
+            {
+                var include = new List<string> { "Restaurant" };
+
+                var dishes = await _dishRepo.GetDishRestaurantsAsync(
+                    e => e.DishId == id,
+                    rdFilter: null,
+                    tracked: false,
+                    includeProperties: null);
+
+                if (dishes == null)
+                {
+                    return NotFound(new ResponseDTO()
+                    {
+                        ErrorMessage = new List<string>() {
+                            "Restaurant not found."
+                        },
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound
+                    });
+                }
+                var dishesDTO = _mapper.Map<List<DishRestaurantDTO>>(dishes);
+
+                return Ok(new ResponseDTO()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = dishesDTO
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorResponse(ex));
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateDish([FromBody] DishCreateDTO dishDTO)
         {
@@ -125,24 +168,36 @@ namespace AliceRestaurant.Controllers
                     }
                 }
 
-                if (errors.Count > 0)
+                var restaurantIds = dishDTO.RestaurantIds ?? new List<int>();
+                if (restaurantIds.Count > 0)
                 {
-                    return NotFound(new ResponseDTO()
+                    // check whether all Id in restaurantIDs are valid
+                    var restaurants = await _restaurantRepo.GetAllAsync(e => restaurantIds.Contains(e.RestaurantId));
+                    if (restaurantIds.Count != restaurants.Count())
                     {
-                        ErrorMessage = errors,
-                        IsSuccess = false,
-                        StatusCode = HttpStatusCode.NotFound
-                    });
+                        errors.Add("One or more restaurant IDs are not found.");
+                    }
                 }
 
-                var dish = _mapper.Map<Dish>(dishDTO);
-                var response = await _dishRepo.CreateAsync(dish);
+                if (errors.Count > 0)
+                {
+                    return NotFound(ErrorResponse(customEx: string.Join("|", errors), statusCode: HttpStatusCode.NotFound));
+                }
+
+                // Step 1: Create the dish
+                var toInsert = _mapper.Map<Dish>(dishDTO);
+                var newDish = await _dishRepo.CreateAsync(toInsert);
+
+                // Step 2: Create the restaurant dishes
+                var restaurantDishes = await _restaurantDishRepo.CreateRangeAsync(newDish.DishId, restaurantIds);
+
+                newDish.RestaurantDishes = restaurantDishes.ToList();
 
                 return Ok(new ResponseDTO()
                 {
                     StatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
-                    Result = _mapper.Map<DishDTO>(response)
+                    Result = _mapper.Map<DishDTO>(newDish)
                 });
             }
             catch (Exception ex)
@@ -157,6 +212,13 @@ namespace AliceRestaurant.Controllers
             try
             {
                 List<string> errors = new List<string>();
+
+                var dish = await _dishRepo.GetAsync(e => e.DishId == id);
+                if (dish == null)
+                {
+                    return NotFound(ErrorResponse(customEx: "Dish not found.", statusCode: HttpStatusCode.NotFound));
+                }
+
                 if (dishDTO.DineInCategoryId != null)
                 {
                     var dineinCat = await _dineInCatRepo.GetAsync(e => e.DineInCategoryId == dishDTO.DineInCategoryId);
@@ -174,39 +236,30 @@ namespace AliceRestaurant.Controllers
                         errors.Add("Delivery category is not found.");
                     }
                 }
+                // check whether the restaurantIDs are all valid
+                var restaurantIds = dishDTO.RestaurantIds ?? new List<int>();
+                var restaurants = await _restaurantRepo.GetAllAsync(e => restaurantIds.Contains(e.RestaurantId));
+                if (restaurantIds.Count != restaurants.Count())
+                {
+                    errors.Add("One or more restaurant IDs are not found.");
+                }
 
                 if (errors.Count > 0)
                 {
-                    return NotFound(new ResponseDTO()
-                    {
-                        ErrorMessage = errors,
-                        IsSuccess = false,
-                        StatusCode = HttpStatusCode.NotFound
-                    });
-                }
-
-
-                var dish = await _dishRepo.GetAsync(e => e.DishId == id);
-                if (dish == null)
-                {
-                    return NotFound(new ResponseDTO()
-                    {
-                        ErrorMessage = new List<string>() {
-                            "Dish not found."
-                        },
-                        IsSuccess = false,
-                        StatusCode = HttpStatusCode.NotFound
-                    });
+                    return NotFound(ErrorResponse(customEx: string.Join("|", errors), statusCode: HttpStatusCode.NotFound));
                 }
 
                 _mapper.Map(dishDTO, dish);
-                var response = await _dishRepo.UpdateAsync(dish);
+
+                await _dishRepo.UpdateAsync(dish);
+
+                await _restaurantDishRepo.UpdateRangeAsync(id, restaurantIds);
 
                 return Ok(new ResponseDTO()
                 {
                     StatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
-                    Result = _mapper.Map<DishDTO>(response)
+                    Result = _mapper.Map<DishDTO>(dish)
                 });
             }
             catch (Exception ex)
@@ -256,16 +309,19 @@ namespace AliceRestaurant.Controllers
         /// <param name="ex">The exception.</param>
         /// <param name="customEx">Custom error message.</param>
         /// <returns>The error response.</returns>
-        private ResponseDTO ErrorResponse(Exception ex = null, string customEx = null)
+        private ResponseDTO ErrorResponse(Exception ex = null, string customEx = null, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
+            List<string> errors = customEx.Split("|").ToList();
+            if (ex != null)
+            {
+                errors.Add(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+
             return new ResponseDTO
             {
-                ErrorMessage = new List<string>() {
-                    customEx ?? "An error occurred while processing your request.",
-                    ex == null ? null: ex.InnerException != null ? ex.InnerException.Message : ex.Message
-                },
+                ErrorMessage = errors,
                 IsSuccess = false,
-                StatusCode = HttpStatusCode.BadRequest
+                StatusCode = statusCode
             };
         }
     }

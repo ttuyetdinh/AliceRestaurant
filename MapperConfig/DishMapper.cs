@@ -33,6 +33,13 @@ namespace AliceRestaurant.MapperConfig
                     dest => dest.CategoryId,
                     opt => opt.MapFrom(src => src.DeliveryCategoryId)
                 );
+
+            config.CreateMap<RestaurantDish, DishRestaurantDTO>()
+                .ForMember(
+                    dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Restaurant.Name)
+                );
+
         }
     }
 }

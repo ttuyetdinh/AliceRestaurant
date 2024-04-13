@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AliceRestaurant.Data;
 using AliceRestaurant.Models;
+using AliceRestaurant.Models.DTO.DishDTO;
 using AliceRestaurant.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -111,6 +112,63 @@ namespace AliceRestaurant.Repository
                     };
                 }
                 return await query.FirstOrDefaultAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<Restaurant>> GetDishRestaurantsAsync(
+            Expression<Func<Dish, bool>>? dishFilter = null,
+            Expression<Func<RestaurantDish, bool>>? rdFilter = null,
+            bool tracked = true, List<string>? includeProperties = null)
+        {
+            try
+            {
+                int dishId = await GetDishId(dishFilter);
+                if (dishId == 0)
+                {
+                    return null;
+                }
+
+                IQueryable<RestaurantDish> query = _db.RestaurantDishes;
+
+                query = !tracked ? query.AsNoTracking() : query;
+
+                query = rdFilter != null ? query.Where(rdFilter) : query;
+
+                if (includeProperties != null)
+                {
+                    foreach (var property in includeProperties)
+                    {
+                        query = query.Include($"Restaurant.{property}");
+                    }
+                }
+
+                var restaurants = await query.Where(e => e.DishId == dishId)
+                                .Select(e => e.Restaurant)
+                                .ToListAsync();
+                return restaurants;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        // helper method
+        private async Task<int> GetDishId(Expression<Func<Dish, bool>>? filter = null)
+        {
+            try
+            {
+                IQueryable<Dish> resQuery = dbSet;
+
+                resQuery = filter != null ? resQuery.Where(filter) : resQuery;
+
+                var dish = await resQuery.FirstOrDefaultAsync();
+                return dish?.DishId ?? 0;
             }
             catch (Exception)
             {
