@@ -44,11 +44,10 @@ namespace AliceRestaurant.Repository
             var existingRestaurantDishes = await dbSet.Where(x => x.DishId == dishId).ToListAsync();
             var currentTime = DateTime.Now;
 
-            // Delete restaurantDishes not in restaurantIds
-            var toDelete = existingRestaurantDishes.Where(x => !restaurantIds.Contains(x.RestaurantId));
-            dbSet.RemoveRange(toDelete);
+            // Find the restaurant dishes to delete
+            var toDelete = existingRestaurantDishes.Where(x => !restaurantIds.Contains(x.RestaurantId)).ToList();
 
-            // Add new restaurantDishes
+            // Create new restaurantDishes
             var newRestaurantDishes = restaurantIds
                 .Except(existingRestaurantDishes.Select(x => x.RestaurantId))
                 .Select(resId => new RestaurantDish
@@ -58,24 +57,41 @@ namespace AliceRestaurant.Repository
                     CreatedOn = currentTime,
                     LastUpdated = currentTime
                 }).ToList();
-            await dbSet.AddRangeAsync(newRestaurantDishes);
 
-            await _db.SaveChangesAsync();
+            if (toDelete.Any())
+            {
+                dbSet.RemoveRange(toDelete);
+            }
+
+            if (newRestaurantDishes.Any())
+            {
+                await dbSet.AddRangeAsync(newRestaurantDishes);
+            }
+
+            if (toDelete.Any() || newRestaurantDishes.Any())
+            {
+                await _db.SaveChangesAsync();
+            }
 
             return existingRestaurantDishes.Except(toDelete).Concat(newRestaurantDishes);
-
         }
         public async Task<IEnumerable<RestaurantDish>> CreateRangeAsync(int dishId, IEnumerable<int> restaurantIds)
         {
-            var restaurantDishes = new List<RestaurantDish>();
             var currentTime = DateTime.Now;
-            foreach (var resId in restaurantIds)
-            {
-                restaurantDishes.Add(new RestaurantDish { DishId = dishId, RestaurantId = resId, CreatedOn = currentTime, LastUpdated = currentTime });
-            }
+            var restaurantDishes = restaurantIds
+                .Select(resId => new RestaurantDish
+                {
+                    DishId = dishId,
+                    RestaurantId = resId,
+                    CreatedOn = currentTime,
+                    LastUpdated = currentTime
+                }).ToList();
 
-            await dbSet.AddRangeAsync(restaurantDishes);
-            await _db.SaveChangesAsync();
+            if (restaurantDishes.Any())
+            {
+                await dbSet.AddRangeAsync(restaurantDishes);
+                await _db.SaveChangesAsync();
+            }
 
             return restaurantDishes;
         }

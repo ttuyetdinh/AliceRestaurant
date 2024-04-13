@@ -24,5 +24,6 @@ namespace AliceRestaurant.Models.DTO.DishDTO
         public DateTime? SellingDate { get; set; }
         public bool? IsAvailable { get; set; }
         public string? ImageUrl { get; set; }
+        public List<int>? RestaurantIds { get; set; }
     }
 }
