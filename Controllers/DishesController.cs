@@ -20,14 +20,18 @@ namespace AliceRestaurant.Controllers
         private readonly IDishRepository _dishRepo;
         private readonly IDineInCategoryRepository _dineInCatRepo;
         private readonly IDeliveryCategoryRepository _deliveryCatRepo;
+        private readonly IRestaurantRepository _restaurantRepo;
+        private readonly IRestaurantDishRepository _restaurantDishRepo;
         private readonly IMapper _mapper;
 
-        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo)
+        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo, IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo)
         {
             _dishRepo = dishRepo;
             _mapper = mapper;
             _dineInCatRepo = dineInCatRepo;
             _deliveryCatRepo = deliveryCatRepo;
+            _restaurantRepo = restaurantRepo;
+            _restaurantDishRepo = restaurantDishRepo;
         }
 
 
@@ -101,6 +105,45 @@ namespace AliceRestaurant.Controllers
             }
         }
 
+        [HttpGet("{id:int}/restaurants")]
+        public async Task<IActionResult> GetDishRestaurants(int id)
+        {
+            try
+            {
+                var include = new List<string> { "Restaurant" };
+
+                var dishes = await _dishRepo.GetDishRestaurantsAsync(
+                    e => e.DishId == id,
+                    rdFilter: null,
+                    tracked: false,
+                    includeProperties: null);
+
+                if (dishes == null)
+                {
+                    return NotFound(new ResponseDTO()
+                    {
+                        ErrorMessage = new List<string>() {
+                            "Restaurant not found."
+                        },
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound
+                    });
+                }
+                var dishesDTO = _mapper.Map<List<DishRestaurantDTO>>(dishes);
+
+                return Ok(new ResponseDTO()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = dishesDTO
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorResponse(ex));
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateDish([FromBody] DishCreateDTO dishDTO)
         {
@@ -143,6 +186,52 @@ namespace AliceRestaurant.Controllers
                     StatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
                     Result = _mapper.Map<DishDTO>(response)
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorResponse(ex));
+            }
+        }
+
+        [HttpPost("{id:int}/restaurants")]
+        public async Task<IActionResult> CreateDishRestaurants(int id, [FromBody] List<int> restaurantIds)
+        {
+            try
+            {
+                var dish = await _dishRepo.GetAsync(e => e.DishId == id);
+                if (dish == null)
+                {
+                    return NotFound(new ResponseDTO()
+                    {
+                        ErrorMessage = new List<string>() {
+                            "Dish not found."
+                        },
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound
+                    });
+                }
+                // check whether the restaurantIDs are all valid
+                var restaurants = await _restaurantRepo.GetAllAsync(e => restaurantIds.Contains(e.RestaurantId), tracked: false);
+                if (restaurantIds.Count != restaurants.Count())
+                {
+                    return BadRequest(ErrorResponse(customEx: "One or more restaurant IDs are invalid."));
+                }
+
+                var restaurantDishes = await _restaurantDishRepo.GetAllAsync(e => e.DishId == id && restaurantIds.Contains(e.RestaurantId));
+                if (restaurantDishes.Count() > 0)
+                {
+                    return BadRequest(ErrorResponse(customEx: "One or more restaurant IDs already exist for the dish."));
+                }
+
+
+                var response = await _restaurantDishRepo.CreateRangeAsync(id, restaurantIds);
+
+                return Ok(new ResponseDTO()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Result = _mapper.Map<List<DishRestaurantDTO>>(response)
                 });
             }
             catch (Exception ex)
