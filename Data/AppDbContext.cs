@@ -19,6 +19,7 @@ namespace AliceRestaurant.Data
 
         }
         public DbSet<Dish> Dishes { get; set; }
+        public DbSet<DishHistory> DishHistories { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<RestaurantDish> RestaurantDishes { get; set; }
         public DbSet<DineInCategory> DineInCategories { get; set; }

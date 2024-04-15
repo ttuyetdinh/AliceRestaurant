@@ -16,8 +16,9 @@ namespace AliceRestaurant.Models
         public int DishHistoryId { get; set; }
         public int DishId { get; set; }
         public int DineInCategoryId { get; set; } // foreign key
+        public string? DineInCategoryName { get; set; }
         public int DeliveryCategoryId { get; set; } // foreign key
-        [Required]
+        public string? DeliveryCategoryName { get; set; }
         public string? DishName { get; set; }
         public string? ShortName { get; set; }
         public string? EnglishName { get; set; }
@@ -30,6 +31,7 @@ namespace AliceRestaurant.Models
         public DateTime? SellingDate { get; set; }
         public bool? IsAvailable { get; set; }
         public string? ImageUrl { get; set; }
+        public string? Action { get; set; }
         public DateTime? LastUpdated { get; set; }
         public DateTime? CreatedOn { get; set; }
     }
