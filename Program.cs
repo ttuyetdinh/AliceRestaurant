@@ -15,11 +15,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,  // Maximum number of retry attempts.
+                maxRetryDelay: TimeSpan.FromSeconds(15),  // Maximum delay between retries.
+                errorNumbersToAdd: null);  // SQL error codes to consider as transient.
+        });
 });
 
 // add DI
 builder.Services.AddScoped<IDishRepository, DishRepository>();
+builder.Services.AddScoped<IDishHistoryRepository, DishHistoryRepository>();
 builder.Services.AddScoped<IDineInCategoryRepository, DineInCategoryRepository>();
 builder.Services.AddScoped<IDeliveryCategoryRepository, DeliveryCategoryRepository>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
