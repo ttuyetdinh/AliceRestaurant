@@ -18,13 +18,14 @@ namespace AliceRestaurant.Controllers
     public class DishesController : ControllerBase
     {
         private readonly IDishRepository _dishRepo;
+        private readonly IDishHistoryRepository _dishHistoryRepo;
         private readonly IDineInCategoryRepository _dineInCatRepo;
         private readonly IDeliveryCategoryRepository _deliveryCatRepo;
         private readonly IRestaurantRepository _restaurantRepo;
         private readonly IRestaurantDishRepository _restaurantDishRepo;
         private readonly IMapper _mapper;
 
-        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo, IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo)
+        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo, IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo, IDishHistoryRepository dishHistoryRepo)
         {
             _dishRepo = dishRepo;
             _mapper = mapper;
@@ -32,6 +33,7 @@ namespace AliceRestaurant.Controllers
             _deliveryCatRepo = deliveryCatRepo;
             _restaurantRepo = restaurantRepo;
             _restaurantDishRepo = restaurantDishRepo;
+            _dishHistoryRepo = dishHistoryRepo;
         }
 
 
@@ -212,8 +214,10 @@ namespace AliceRestaurant.Controllers
             try
             {
                 List<string> errors = new List<string>();
+                List<string> includeProperties = new List<string> { "DineInCategory", "DeliveryCategory" };
 
-                var dish = await _dishRepo.GetAsync(e => e.DishId == id);
+                var dish = await _dishRepo.GetAsync(e => e.DishId == id, includeProperties: includeProperties);
+
                 if (dish == null)
                 {
                     return NotFound(ErrorResponse(customEx: "Dish not found.", statusCode: HttpStatusCode.NotFound));
@@ -249,11 +253,15 @@ namespace AliceRestaurant.Controllers
                     return NotFound(ErrorResponse(customEx: string.Join("|", errors), statusCode: HttpStatusCode.NotFound));
                 }
 
+                var dishHistory = _mapper.Map<DishHistory>(dish);
                 _mapper.Map(dishDTO, dish);
 
                 await _dishRepo.UpdateAsync(dish);
 
                 await _restaurantDishRepo.UpdateRangeAsync(id, restaurantIds);
+
+                dishHistory.Action = "Update";
+                await _dishHistoryRepo.CreateAsync(dishHistory);
 
                 return Ok(new ResponseDTO()
                 {
@@ -273,7 +281,8 @@ namespace AliceRestaurant.Controllers
         {
             try
             {
-                var dish = await _dishRepo.GetAsync(e => e.DishId == id);
+                List<string> includes = new List<string> { "DineInCategory", "DeliveryCategory" };
+                var dish = await _dishRepo.GetAsync(e => e.DishId == id, includeProperties: includes);
                 if (dish == null)
                 {
                     return NotFound(new ResponseDTO()
@@ -287,6 +296,10 @@ namespace AliceRestaurant.Controllers
                 }
 
                 var response = await _dishRepo.RemoveAsync(dish);
+
+                var dishHistory = _mapper.Map<DishHistory>(dish);
+                dishHistory.Action = "Delete";
+                await _dishHistoryRepo.CreateAsync(dishHistory);
 
                 return Ok(new ResponseDTO()
                 {

@@ -13,6 +13,8 @@ namespace AliceRestaurant.MapperConfig
                 config.ApplyDropdownMapping();
                 config.ApplyDineInCategoryMapping();
                 config.ApplyDeliveryCategoryMapping();
+                config.ApplyDishHistoryMapping();
+
             });
 
             return mappingConfig;
