@@ -8,8 +8,8 @@ namespace AliceRestaurant.Models
 {
     public class ChangeLog
     {
-        [Key]
         public int? ChangeLogId { get; set; }
+        public int? ChangeLogItem { get; set; }
         public int? RecordId { get; set; }
         public string? TableName { get; set; }
         public string? ColumnName { get; set; }
