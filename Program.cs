@@ -4,6 +4,8 @@ using AliceRestaurant.Extensions;
 using AliceRestaurant.MapperConfig;
 using AliceRestaurant.Repository;
 using AliceRestaurant.Repository.IRepository;
+using AliceRestaurant.Service;
+using AliceRestaurant.Service.IService;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
@@ -28,12 +30,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // add DI
 builder.Services.AddScoped<IDishRepository, DishRepository>();
-builder.Services.AddScoped<IDishHistoryRepository, DishHistoryRepository>();
+builder.Services.AddScoped<IChangeLogRepository, ChangeLogRepository>();
 builder.Services.AddScoped<IDineInCategoryRepository, DineInCategoryRepository>();
 builder.Services.AddScoped<IDeliveryCategoryRepository, DeliveryCategoryRepository>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 builder.Services.AddScoped<IDropdownRepository, DropdownRepository>();
 builder.Services.AddScoped<IRestaurantDishRepository, RestaurantDishRepository>();
+
+// add services
+builder.Services.AddScoped(typeof(IChangeLogService<>), typeof(ChangeLogService<>));
+builder.Services.AddScoped<IChangeLogServiceFactory, ChangeLogServiceFactory>();
 
 
 

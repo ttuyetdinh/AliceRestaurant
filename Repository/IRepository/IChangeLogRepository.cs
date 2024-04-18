@@ -7,8 +7,8 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.Repository.IRepository
 {
-    public interface IDishHistoryRepository : IRepository<DishHistory>
+    public interface IChangeLogRepository : IRepository<ChangeLog>
     {
-        Task<DishHistory> UpdateAsync(DishHistory entity);
+        // Task<ChangeLog> UpdateAsync(ChangeLog entity);
     }
 }

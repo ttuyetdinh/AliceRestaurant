@@ -8,8 +8,10 @@ using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
 using AliceRestaurant.Models.DTO.DishDTO;
 using AliceRestaurant.Repository.IRepository;
+using AliceRestaurant.Service.IService;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using static AliceRestaurant.Ultilities.SD;
 
 namespace AliceRestaurant.Controllers
 {
@@ -18,14 +20,20 @@ namespace AliceRestaurant.Controllers
     public class DishesController : ControllerBase
     {
         private readonly IDishRepository _dishRepo;
-        private readonly IDishHistoryRepository _dishHistoryRepo;
         private readonly IDineInCategoryRepository _dineInCatRepo;
         private readonly IDeliveryCategoryRepository _deliveryCatRepo;
         private readonly IRestaurantRepository _restaurantRepo;
         private readonly IRestaurantDishRepository _restaurantDishRepo;
+        private readonly IChangeLogServiceFactory _changeLogServiceFactory;
         private readonly IMapper _mapper;
 
-        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo, IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo, IDishHistoryRepository dishHistoryRepo)
+
+        public DishesController(
+            IDishRepository dishRepo,
+            IMapper mapper, IDineInCategoryRepository dineInCatRepo,
+            IDeliveryCategoryRepository deliveryCatRepo,
+            IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo,
+            IChangeLogServiceFactory changeLogServiceFactory)
         {
             _dishRepo = dishRepo;
             _mapper = mapper;
@@ -33,7 +41,7 @@ namespace AliceRestaurant.Controllers
             _deliveryCatRepo = deliveryCatRepo;
             _restaurantRepo = restaurantRepo;
             _restaurantDishRepo = restaurantDishRepo;
-            _dishHistoryRepo = dishHistoryRepo;
+            _changeLogServiceFactory = changeLogServiceFactory;
         }
 
 
@@ -195,6 +203,10 @@ namespace AliceRestaurant.Controllers
 
                 newDish.RestaurantDishes = restaurantDishes.ToList();
 
+                // Step 3: Record to changelog
+                var changeLogService = _changeLogServiceFactory.CreateService<Dish>();
+                await changeLogService.RecordChangeLog(null, newDish, DbAction.Create);
+
                 return Ok(new ResponseDTO()
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -261,7 +273,7 @@ namespace AliceRestaurant.Controllers
                 await _restaurantDishRepo.UpdateRangeAsync(id, restaurantIds);
 
                 dishHistory.Action = "Update";
-                await _dishHistoryRepo.CreateAsync(dishHistory);
+                // await _dishHistoryRepo.CreateAsync(dishHistory);
 
                 return Ok(new ResponseDTO()
                 {
@@ -299,7 +311,7 @@ namespace AliceRestaurant.Controllers
 
                 var dishHistory = _mapper.Map<DishHistory>(dish);
                 dishHistory.Action = "Delete";
-                await _dishHistoryRepo.CreateAsync(dishHistory);
+                // await _dishHistoryRepo.CreateAsync(dishHistory);
 
                 return Ok(new ResponseDTO()
                 {
