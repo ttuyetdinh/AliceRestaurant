@@ -10,5 +10,7 @@ namespace AliceRestaurant.Repository.IRepository
     public interface IChangeLogRepository : IRepository<ChangeLog>
     {
         // Task<ChangeLog> UpdateAsync(ChangeLog entity);
+        Task<IEnumerable<ChangeLog>> CreateRangeAsync(IEnumerable<ChangeLog> entities);
+        Task<int> GetMaxChangeLogId();
     }
 }

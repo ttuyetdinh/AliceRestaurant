@@ -10,6 +10,7 @@ using static AliceRestaurant.Ultilities.SD;
 using AliceRestaurant.Models;
 using System.ComponentModel.DataAnnotations;
 using AliceRestaurant.Data;
+using System.Collections;
 
 namespace AliceRestaurant.Service
 {
@@ -31,6 +32,7 @@ namespace AliceRestaurant.Service
             {
                 string tableName = typeof(T).Name.Pluralize(inputIsKnownToBeSingular: false);
                 string actionString = action.ToString();
+                int changeLogId = await _changeLogRepo.GetMaxChangeLogId();
 
                 // todo: find the change and call repository to insert to db
                 switch (action)
@@ -39,6 +41,8 @@ namespace AliceRestaurant.Service
                         // Perform actions for Create case
                         await _changeLogRepo.CreateAsync(new ChangeLog
                         {
+                            ChangeLogId = changeLogId + 1,
+                            ChangeLogItem = 1,
                             RecordId = GetPrimaryKeyValue(newEntity),
                             TableName = tableName,
                             ColumnName = "All",
@@ -49,6 +53,61 @@ namespace AliceRestaurant.Service
                             CreatedOn = DateTime.Now,
                         });
                         break;
+
+                    case DbAction.Delete:
+                        await _changeLogRepo.CreateAsync(new ChangeLog
+                        {
+                            ChangeLogId = changeLogId + 1,
+                            ChangeLogItem = 1,
+                            RecordId = GetPrimaryKeyValue(oldEntity),
+                            TableName = tableName,
+                            ColumnName = "All",
+                            OldValue = null,
+                            NewValue = null,
+                            Action = actionString,
+                            UserId = null,
+                            CreatedOn = DateTime.Now,
+                        });
+                        break;
+
+                    case DbAction.Update:
+                        // Perform actions for Update case
+                        var excludeFields = new List<string> { "LastUpdated", "CreatedOn" };
+                        var entityProperties = GetDatabaseFields<T>(excludeFields);
+                        var insertList = new List<ChangeLog>();
+
+                        int changeLogItem = 1;
+                        foreach (var property in entityProperties)
+                        {
+                            var oldValue = oldEntity.GetType().GetProperty(property)?.GetValue(oldEntity);
+                            var newValue = newEntity.GetType().GetProperty(property)?.GetValue(newEntity);
+
+                            if (oldValue == null && newValue == null)
+                            {
+                                continue;
+                            }
+
+                            if (oldValue == null || newValue == null || !oldValue.Equals(newValue))
+                            {
+                                insertList.Add(new ChangeLog
+                                {
+                                    ChangeLogId = changeLogId + 1,
+                                    ChangeLogItem = changeLogItem++,
+                                    RecordId = GetPrimaryKeyValue(oldEntity),
+                                    TableName = tableName,
+                                    ColumnName = property,
+                                    OldValue = oldValue?.ToString(),
+                                    NewValue = newValue?.ToString(),
+                                    Action = actionString,
+                                    UserId = null,
+                                    CreatedOn = DateTime.Now,
+                                });
+                            }
+                        }
+
+                        await _changeLogRepo.CreateRangeAsync(insertList);
+                        break;
+
                     default:
                         break;
                 }
@@ -77,6 +136,28 @@ namespace AliceRestaurant.Service
             }
 
             return keyProperty.GetValue(entity) as int? ?? 0; // Safely cast the return value to int
+        }
+
+        private List<string> GetDatabaseFields<T>(List<string> excludeFields = null)
+        {
+            var entityType = _db.Model.FindEntityType(typeof(T));
+            if (entityType == null)
+            {
+                return new List<string>();
+            }
+
+            var allProperties = entityType.GetProperties().Select(p => p.Name);
+            var navigationProps = entityType.GetNavigations().Select(n => n.Name);
+            var primaryKey = entityType.FindPrimaryKey().Properties.Select(p => p.Name);
+
+            var databaseFields = allProperties.Except(navigationProps).Except(primaryKey);
+
+            if (excludeFields != null)
+            {
+                databaseFields = databaseFields.Except(excludeFields);
+            }
+
+            return databaseFields.ToList();
         }
     }
 }

@@ -26,5 +26,21 @@ namespace AliceRestaurant.Repository
             }
             return await base.CreateAsync(entity);
         }
+
+        public async Task<IEnumerable<ChangeLog>> CreateRangeAsync(IEnumerable<ChangeLog> entities)
+        {
+            if (entities.Any())
+            {
+                await dbSet.AddRangeAsync(entities);
+                await _db.SaveChangesAsync();
+            }
+
+            return entities;
+        }
+
+        public async Task<int> GetMaxChangeLogId()
+        {
+            return await dbSet.MaxAsync(x => x.ChangeLogId) ?? 0;
+        }
     }
 }
