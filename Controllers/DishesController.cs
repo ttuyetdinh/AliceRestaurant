@@ -230,7 +230,12 @@ namespace AliceRestaurant.Controllers
                 List<string> includeProperties = new List<string> { "DineInCategory", "DeliveryCategory" };
 
                 var dish = await _dishRepo.GetAsync(e => e.DishId == id, includeProperties: includeProperties);
-                var oldDish = JsonConvert.DeserializeObject<Dish>(JsonConvert.SerializeObject(dish));
+
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                var oldDish = JsonConvert.DeserializeObject<Dish>(JsonConvert.SerializeObject(dish, settings));
 
                 if (dish == null)
                 {
