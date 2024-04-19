@@ -26,6 +26,13 @@ namespace AliceRestaurant.Ultilities
             User,
             CustomRole
         };
+
+        public enum DbAction
+        {
+            Create,
+            Update,
+            Delete
+        };
         public static string CouponAPIBase { get; set; }
         public static string AuthAPIBase { get; set; }
         public static string AccessToken = "JWTToken";

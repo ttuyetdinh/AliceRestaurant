@@ -14,6 +14,7 @@ namespace AliceRestaurant.MapperConfig
                 config.ApplyDineInCategoryMapping();
                 config.ApplyDeliveryCategoryMapping();
                 config.ApplyDishHistoryMapping();
+                config.ApplyChangeLogMapping();
 
             });
 

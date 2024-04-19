@@ -8,8 +8,11 @@ using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO;
 using AliceRestaurant.Models.DTO.DishDTO;
 using AliceRestaurant.Repository.IRepository;
+using AliceRestaurant.Service.IService;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using static AliceRestaurant.Ultilities.SD;
 
 namespace AliceRestaurant.Controllers
 {
@@ -18,14 +21,20 @@ namespace AliceRestaurant.Controllers
     public class DishesController : ControllerBase
     {
         private readonly IDishRepository _dishRepo;
-        private readonly IDishHistoryRepository _dishHistoryRepo;
         private readonly IDineInCategoryRepository _dineInCatRepo;
         private readonly IDeliveryCategoryRepository _deliveryCatRepo;
         private readonly IRestaurantRepository _restaurantRepo;
         private readonly IRestaurantDishRepository _restaurantDishRepo;
+        private readonly IChangeLogServiceFactory _changeLogServiceFactory;
         private readonly IMapper _mapper;
 
-        public DishesController(IDishRepository dishRepo, IMapper mapper, IDineInCategoryRepository dineInCatRepo, IDeliveryCategoryRepository deliveryCatRepo, IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo, IDishHistoryRepository dishHistoryRepo)
+
+        public DishesController(
+            IDishRepository dishRepo,
+            IMapper mapper, IDineInCategoryRepository dineInCatRepo,
+            IDeliveryCategoryRepository deliveryCatRepo,
+            IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo,
+            IChangeLogServiceFactory changeLogServiceFactory)
         {
             _dishRepo = dishRepo;
             _mapper = mapper;
@@ -33,7 +42,7 @@ namespace AliceRestaurant.Controllers
             _deliveryCatRepo = deliveryCatRepo;
             _restaurantRepo = restaurantRepo;
             _restaurantDishRepo = restaurantDishRepo;
-            _dishHistoryRepo = dishHistoryRepo;
+            _changeLogServiceFactory = changeLogServiceFactory;
         }
 
 
@@ -193,6 +202,10 @@ namespace AliceRestaurant.Controllers
                 // Step 2: Create the restaurant dishes
                 var restaurantDishes = await _restaurantDishRepo.CreateRangeAsync(newDish.DishId, restaurantIds);
 
+                // Step 3: Record to changelog
+                var changeLogService = _changeLogServiceFactory.CreateService<Dish>();
+                await changeLogService.RecordChangeLog(null, newDish, DbAction.Create);
+
                 newDish.RestaurantDishes = restaurantDishes.ToList();
 
                 return Ok(new ResponseDTO()
@@ -217,6 +230,12 @@ namespace AliceRestaurant.Controllers
                 List<string> includeProperties = new List<string> { "DineInCategory", "DeliveryCategory" };
 
                 var dish = await _dishRepo.GetAsync(e => e.DishId == id, includeProperties: includeProperties);
+
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                var oldDish = JsonConvert.DeserializeObject<Dish>(JsonConvert.SerializeObject(dish, settings));
 
                 if (dish == null)
                 {
@@ -253,15 +272,15 @@ namespace AliceRestaurant.Controllers
                     return NotFound(ErrorResponse(customEx: string.Join("|", errors), statusCode: HttpStatusCode.NotFound));
                 }
 
-                var dishHistory = _mapper.Map<DishHistory>(dish);
                 _mapper.Map(dishDTO, dish);
 
                 await _dishRepo.UpdateAsync(dish);
 
                 await _restaurantDishRepo.UpdateRangeAsync(id, restaurantIds);
 
-                dishHistory.Action = "Update";
-                await _dishHistoryRepo.CreateAsync(dishHistory);
+                // Record to change log
+                var changeLogService = _changeLogServiceFactory.CreateService<Dish>();
+                await changeLogService.RecordChangeLog(oldDish, dish, DbAction.Update);
 
                 return Ok(new ResponseDTO()
                 {
@@ -296,10 +315,9 @@ namespace AliceRestaurant.Controllers
                 }
 
                 var response = await _dishRepo.RemoveAsync(dish);
-
-                var dishHistory = _mapper.Map<DishHistory>(dish);
-                dishHistory.Action = "Delete";
-                await _dishHistoryRepo.CreateAsync(dishHistory);
+                // Record to change log
+                var changeLogService = _changeLogServiceFactory.CreateService<Dish>();
+                await changeLogService.RecordChangeLog(dish, null, DbAction.Delete);
 
                 return Ok(new ResponseDTO()
                 {
