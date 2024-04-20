@@ -7,7 +7,7 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
-    public interface IDeliveryCategoryRepository : IRepository<DeliveryCategory>
+    public interface IDeliveryCategoryRepository : IBaseRepository<DeliveryCategory>
     {
         Task<DeliveryCategory> UpdateAsync(DeliveryCategory entity);
         Task<DeliveryCategory> GetLastCategoryAsync();

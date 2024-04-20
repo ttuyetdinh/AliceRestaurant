@@ -7,7 +7,7 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
-    public interface IChangeLogRepository : IRepository<ChangeLog>
+    public interface IChangeLogRepository : IBaseRepository<ChangeLog>
     {
         // Task<ChangeLog> UpdateAsync(ChangeLog entity);
         Task<IEnumerable<ChangeLog>> CreateRangeAsync(IEnumerable<ChangeLog> entities);

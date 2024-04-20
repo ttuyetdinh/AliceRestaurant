@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AliceRestaurant.DataAccess.Repository
 {
-    public class DishRepository : Repository<Dish>, IDishRepository
+    public class DishRepository : BaseRepository<Dish>, IDishRepository
     {
         private readonly AppDbContext _db;
         public DishRepository(AppDbContext db) : base(db)

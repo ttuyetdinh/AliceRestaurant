@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AliceRestaurant.DataAccess.Repository
 {
-    public class RestaurantRepository : Repository<Restaurant>, IRestaurantRepository
+    public class RestaurantRepository : BaseRepository<Restaurant>, IRestaurantRepository
     {
         private readonly AppDbContext _db;
         public RestaurantRepository(AppDbContext db) : base(db)

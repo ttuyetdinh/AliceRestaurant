@@ -8,7 +8,7 @@ using AliceRestaurant.DataAccess.Repository.IRepository;
 
 namespace AliceRestaurant.DataAccess.Repository
 {
-    public class DropdownRepository : Repository<Dropdown>, IDropdownRepository
+    public class DropdownRepository : BaseRepository<Dropdown>, IDropdownRepository
     {
         private readonly AppDbContext _db;
         public DropdownRepository(AppDbContext db) : base(db)

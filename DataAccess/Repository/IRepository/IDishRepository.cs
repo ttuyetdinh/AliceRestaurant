@@ -8,7 +8,7 @@ using AliceRestaurant.Models.DTO.DishDTO;
 
 namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
-    public interface IDishRepository : IRepository<Dish>
+    public interface IDishRepository : IBaseRepository<Dish>
     {
         Task<Dish> UpdateAsync(Dish entity);
         Task<List<Restaurant>> GetDishRestaurantsAsync(

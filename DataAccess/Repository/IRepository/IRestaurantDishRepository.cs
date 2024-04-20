@@ -9,7 +9,7 @@ using AliceRestaurant.Models.DTO.DishDTO;
 
 namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
-    public interface IRestaurantDishRepository : IRepository<RestaurantDish>
+    public interface IRestaurantDishRepository : IBaseRepository<RestaurantDish>
     {
         Task<RestaurantDish> UpdateAsync(RestaurantDish entity);
         Task<IEnumerable<RestaurantDish>> CreateRangeAsync(int dishId, IEnumerable<int> restaurantIds);

@@ -6,7 +6,7 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
-    public interface IDropdownRepository : IRepository<Dropdown>
+    public interface IDropdownRepository : IBaseRepository<Dropdown>
     {
         Task<Dropdown> UpdateAsync(Dropdown entity);
     }

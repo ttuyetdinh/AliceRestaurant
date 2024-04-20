@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AliceRestaurant.DataAccess.Repository
 {
-    public class ChangeLogRepository : Repository<ChangeLog>, IChangeLogRepository
+    public class ChangeLogRepository : BaseRepository<ChangeLog>, IChangeLogRepository
     {
         private readonly AppDbContext _db;
         public ChangeLogRepository(AppDbContext db) : base(db)

@@ -7,7 +7,7 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
-    public interface IRepository<T>
+    public interface IBaseRepository<T>
     {
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, List<string>? includeProperties = null, Pagination? pagination = null, bool tracked = true);
         Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true, List<string>? includeProperties = null);

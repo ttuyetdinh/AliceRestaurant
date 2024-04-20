@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AliceRestaurant.DataAccess.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly AppDbContext _db;
         internal DbSet<T> dbSet;
-        public Repository(AppDbContext db)
+        public BaseRepository(AppDbContext db)
         {
             _db = db;
             dbSet = _db.Set<T>();

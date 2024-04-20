@@ -6,7 +6,7 @@ using AliceRestaurant.Models;
 
 namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
-    public interface IDineInCategoryRepository : IRepository<DineInCategory>
+    public interface IDineInCategoryRepository : IBaseRepository<DineInCategory>
     {
         Task<DineInCategory> UpdateAsync(DineInCategory entity);
         Task<DineInCategory> GetLastCategoryAsync();
