@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AliceRestaurant.Models;
 
-namespace AliceRestaurant.Repository.IRepository
+namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
     public interface IDineInCategoryRepository : IRepository<DineInCategory>
     {

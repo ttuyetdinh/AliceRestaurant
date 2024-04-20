@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using AliceRestaurant.Models;
 using AliceRestaurant.Models.DTO.DishDTO;
 
-namespace AliceRestaurant.Repository.IRepository
+namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
     public interface IRestaurantDishRepository : IRepository<RestaurantDish>
     {

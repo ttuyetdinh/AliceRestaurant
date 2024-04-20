@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AliceRestaurant.Data;
 using AliceRestaurant.Models;
-using AliceRestaurant.Repository.IRepository;
+using AliceRestaurant.DataAccess.Repository.IRepository;
 
-namespace AliceRestaurant.Repository
+namespace AliceRestaurant.DataAccess.Repository
 {
     public class DropdownRepository : Repository<Dropdown>, IDropdownRepository
     {

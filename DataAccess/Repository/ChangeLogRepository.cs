@@ -5,10 +5,10 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AliceRestaurant.Data;
 using AliceRestaurant.Models;
-using AliceRestaurant.Repository.IRepository;
+using AliceRestaurant.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
-namespace AliceRestaurant.Repository
+namespace AliceRestaurant.DataAccess.Repository
 {
     public class ChangeLogRepository : Repository<ChangeLog>, IChangeLogRepository
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Humanizer;
-using AliceRestaurant.Repository.IRepository;
+using AliceRestaurant.DataAccess.Repository.IRepository;
 using AliceRestaurant.Service.IService;
 using Microsoft.EntityFrameworkCore;
 using static AliceRestaurant.Ultilities.SD;

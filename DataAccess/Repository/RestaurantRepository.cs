@@ -5,38 +5,30 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AliceRestaurant.Data;
 using AliceRestaurant.Models;
-using AliceRestaurant.Models.DTO.DishDTO;
-using AliceRestaurant.Repository.IRepository;
+using AliceRestaurant.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
-namespace AliceRestaurant.Repository
+namespace AliceRestaurant.DataAccess.Repository
 {
-    public class DishRepository : Repository<Dish>, IDishRepository
+    public class RestaurantRepository : Repository<Restaurant>, IRestaurantRepository
     {
         private readonly AppDbContext _db;
-        public DishRepository(AppDbContext db) : base(db)
+        public RestaurantRepository(AppDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public async Task<Dish> UpdateAsync(Dish entity)
+        public async Task<Restaurant> UpdateAsync(Restaurant entity)
         {
-            try
-            {
-                entity.LastUpdated = DateTime.Now;
-                _db.Dishes.Update(entity);
+            entity.LastUpdated = DateTime.Now;
+            _db.Restaurants.Update(entity);
 
-                await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
-                return entity;
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
+            return entity;
         }
 
-        public override async Task<Dish> CreateAsync(Dish entity)
+        public override async Task<Restaurant> CreateAsync(Restaurant entity)
         {
             if (entity.CreatedOn == default)
             {
@@ -46,11 +38,11 @@ namespace AliceRestaurant.Repository
             return await base.CreateAsync(entity);
         }
 
-        public override async Task<List<Dish>> GetAllAsync(Expression<Func<Dish, bool>>? filter = null, List<string>? includeProperties = null, Pagination? pagination = null, bool tracked = true)
+        public override async Task<List<Restaurant>> GetAllAsync(Expression<Func<Restaurant, bool>>? filter = null, List<string>? includeProperties = null, Pagination? pagination = null, bool tracked = true)
         {
             try
             {
-                IQueryable<Dish> query = dbSet;
+                IQueryable<Restaurant> query = dbSet;
                 int pageSize = pagination?.PageSize ?? 0;
                 int pageNum = pagination?.PageNum ?? 0;
 
@@ -70,7 +62,14 @@ namespace AliceRestaurant.Repository
                     {
                         if (includeProperty == "RestaurantDishes")
                         {
-                            query = query.Include(x => x.RestaurantDishes).ThenInclude(x => x.Restaurant);
+                            // For dine-in
+                            query = query.Include(x => x.RestaurantDishes)
+                                        .ThenInclude(x => x.Dish)
+                                        .ThenInclude(x => x.DineInCategory);
+                            // For delivery
+                            query = query.Include(x => x.RestaurantDishes)
+                                        .ThenInclude(x => x.Dish)
+                                        .ThenInclude(x => x.DeliveryCategory);
                         }
                         else
                         {
@@ -79,6 +78,7 @@ namespace AliceRestaurant.Repository
                     }
                 }
                 return await query.ToListAsync();
+
             }
             catch (Exception)
             {
@@ -86,11 +86,11 @@ namespace AliceRestaurant.Repository
             }
         }
 
-        public virtual async Task<Dish> GetAsync(Expression<Func<Dish, bool>>? filter = null, bool tracked = true, List<string>? includeProperties = null)
+        public override async Task<Restaurant> GetAsync(Expression<Func<Restaurant, bool>>? filter = null, bool tracked = true, List<string>? includeProperties = null)
         {
             try
             {
-                IQueryable<Dish> query = dbSet;
+                IQueryable<Restaurant> query = dbSet;
 
                 query = !tracked ? query.AsNoTracking() : query;
 
@@ -102,15 +102,22 @@ namespace AliceRestaurant.Repository
                     {
                         if (property == "RestaurantDishes")
                         {
-                            query = query.Include(x => x.RestaurantDishes).ThenInclude(x => x.Restaurant);
+                            // For dine-in
+                            query = query.Include(x => x.RestaurantDishes)
+                                        .ThenInclude(x => x.Dish)
+                                        .ThenInclude(x => x.DineInCategory);
+                            // For delivery
+                            query = query.Include(x => x.RestaurantDishes)
+                                        .ThenInclude(x => x.Dish)
+                                        .ThenInclude(x => x.DeliveryCategory);
                         }
                         else
                         {
                             query = query.Include(property);
                         }
-
                     };
                 }
+
                 return await query.FirstOrDefaultAsync();
             }
             catch (Exception)
@@ -119,15 +126,15 @@ namespace AliceRestaurant.Repository
             }
         }
 
-        public async Task<List<Restaurant>> GetDishRestaurantsAsync(
-            Expression<Func<Dish, bool>>? dishFilter = null,
+        public async Task<List<Dish>> GetRestaurantDishesAsync(
+            Expression<Func<Restaurant, bool>>? resFilter = null,
             Expression<Func<RestaurantDish, bool>>? rdFilter = null,
             bool tracked = true, List<string>? includeProperties = null)
         {
             try
             {
-                int dishId = await GetDishId(dishFilter);
-                if (dishId == 0)
+                int resId = await GetRestaurantId(resFilter);
+                if (resId == 0)
                 {
                     return null;
                 }
@@ -142,14 +149,14 @@ namespace AliceRestaurant.Repository
                 {
                     foreach (var property in includeProperties)
                     {
-                        query = query.Include($"Restaurant.{property}");
+                        query = query.Include($"Dish.{property}");
                     }
                 }
 
-                var restaurants = await query.Where(e => e.DishId == dishId)
-                                .Select(e => e.Restaurant)
+                var dishes = await query.Where(e => e.RestaurantId == resId)
+                                .Select(e => e.Dish)
                                 .ToListAsync();
-                return restaurants;
+                return dishes;
             }
             catch (Exception)
             {
@@ -157,23 +164,23 @@ namespace AliceRestaurant.Repository
             }
         }
 
-
         // helper method
-        private async Task<int> GetDishId(Expression<Func<Dish, bool>>? filter = null)
+        private async Task<int> GetRestaurantId(Expression<Func<Restaurant, bool>>? resFilter = null)
         {
             try
             {
-                IQueryable<Dish> resQuery = dbSet;
+                IQueryable<Restaurant> resQuery = dbSet;
 
-                resQuery = filter != null ? resQuery.Where(filter) : resQuery;
+                resQuery = resFilter != null ? resQuery.Where(resFilter) : resQuery;
 
-                var dish = await resQuery.FirstOrDefaultAsync();
-                return dish?.DishId ?? 0;
+                var restaurant = await resQuery.FirstOrDefaultAsync();
+                return restaurant?.RestaurantId ?? 0;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
     }
 }

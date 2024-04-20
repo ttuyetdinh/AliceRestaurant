@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AliceRestaurant.Data.Configuration;
 using AliceRestaurant.Models;
 
-namespace AliceRestaurant.Repository.IRepository
+namespace AliceRestaurant.DataAccess.Repository.IRepository
 {
     public interface IDeliveryCategoryRepository : IRepository<DeliveryCategory>
     {
