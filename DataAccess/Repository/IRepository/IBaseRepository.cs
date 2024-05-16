@@ -13,6 +13,6 @@ namespace AliceRestaurant.DataAccess.Repository.IRepository
         Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true, List<string>? includeProperties = null);
         Task<T> CreateAsync(T entity);
         Task<T> RemoveAsync(T entity);
-        Task SaveAsync();
+        // Task SaveAsync();
     }
 }

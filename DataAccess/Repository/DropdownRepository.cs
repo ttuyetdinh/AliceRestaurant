@@ -21,7 +21,7 @@ namespace AliceRestaurant.DataAccess.Repository
             entity.LastUpdated = DateTime.Now;
             _db.Dropdowns.Update(entity);
 
-            await _db.SaveChangesAsync();
+            // await _db.SaveChangesAsync();
 
             return entity;
         }

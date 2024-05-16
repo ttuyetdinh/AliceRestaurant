@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using AliceRestaurant.DataAccess.UnitOfWork.IUnitOfWork;
+using AliceRestaurant.DataAccess.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,9 @@ builder.Services.AddScoped<IDeliveryCategoryRepository, DeliveryCategoryReposito
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 builder.Services.AddScoped<IDropdownRepository, DropdownRepository>();
 builder.Services.AddScoped<IRestaurantDishRepository, RestaurantDishRepository>();
+
+// add unit of work
+builder.Services.AddScoped<IUnitofWork, UnitofWork>();
 
 // add services
 builder.Services.AddScoped(typeof(IChangeLogService<>), typeof(ChangeLogService<>));

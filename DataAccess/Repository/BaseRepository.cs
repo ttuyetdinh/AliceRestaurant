@@ -25,7 +25,7 @@ namespace AliceRestaurant.DataAccess.Repository
             try
             {
                 await dbSet.AddAsync(entity);
-                await _db.SaveChangesAsync();
+                // await _db.SaveChangesAsync();
 
                 return entity;
             }
@@ -101,7 +101,7 @@ namespace AliceRestaurant.DataAccess.Repository
             try
             {
                 dbSet.Remove(entity);
-                await _db.SaveChangesAsync();
+                // await _db.SaveChangesAsync();
 
                 return entity;
             }
@@ -111,16 +111,16 @@ namespace AliceRestaurant.DataAccess.Repository
             }
         }
 
-        public virtual async Task SaveAsync()
-        {
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        // public virtual async Task SaveAsync()
+        // {
+        //     try
+        //     {
+        //         await _db.SaveChangesAsync();
+        //     }
+        //     catch (Exception)
+        //     {
+        //         throw;
+        //     }
+        // }
     }
 }

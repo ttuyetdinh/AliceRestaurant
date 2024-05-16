@@ -23,7 +23,7 @@ namespace AliceRestaurant.DataAccess.Repository
             entity.LastUpdated = DateTime.Now;
             dbSet.Update(entity);
 
-            await _db.SaveChangesAsync();
+            // await _db.SaveChangesAsync();
 
             return entity;
         }
@@ -68,10 +68,10 @@ namespace AliceRestaurant.DataAccess.Repository
                 await dbSet.AddRangeAsync(newRestaurantDishes);
             }
 
-            if (toDelete.Any() || newRestaurantDishes.Any())
-            {
-                await _db.SaveChangesAsync();
-            }
+            // if (toDelete.Any() || newRestaurantDishes.Any())
+            // {
+            //     await _db.SaveChangesAsync();
+            // }
 
             return existingRestaurantDishes.Except(toDelete).Concat(newRestaurantDishes);
         }
@@ -90,7 +90,7 @@ namespace AliceRestaurant.DataAccess.Repository
             if (restaurantDishes.Any())
             {
                 await dbSet.AddRangeAsync(restaurantDishes);
-                await _db.SaveChangesAsync();
+                // await _db.SaveChangesAsync();
             }
 
             return restaurantDishes;

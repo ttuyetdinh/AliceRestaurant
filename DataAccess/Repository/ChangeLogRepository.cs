@@ -32,7 +32,7 @@ namespace AliceRestaurant.DataAccess.Repository
             if (entities.Any())
             {
                 await dbSet.AddRangeAsync(entities);
-                await _db.SaveChangesAsync();
+                // await _db.SaveChangesAsync();
             }
 
             return entities;

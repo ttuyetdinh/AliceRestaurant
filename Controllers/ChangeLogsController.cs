@@ -14,6 +14,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static AliceRestaurant.Ultilities.SD;
+using AliceRestaurant.DataAccess.UnitOfWork.IUnitOfWork;
+using AliceRestaurant.DataAccess.Repository;
 
 namespace AliceRestaurant.Controllers
 {
@@ -22,12 +24,14 @@ namespace AliceRestaurant.Controllers
     public class ChangeLogsController : ControllerBase
     {
         private readonly IChangeLogRepository _changeLogRepo;
+        private readonly IUnitofWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ChangeLogsController(IChangeLogRepository changeLogRepo, IMapper mapper)
+        public ChangeLogsController(IChangeLogRepository changeLogRepo, IMapper mapper, IUnitofWork unitOfWork)
         {
             _changeLogRepo = changeLogRepo;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -44,7 +48,8 @@ namespace AliceRestaurant.Controllers
                     && (string.IsNullOrEmpty(tableName) || e.TableName.ToLower().Equals(tableName.ToLower()))
                     && (string.IsNullOrEmpty(action) || e.Action.ToLower().Equals(action.ToLower()));
 
-                var changelogs = await _changeLogRepo.GetAllAsync(filter: filter);
+                var changelogs = await _unitOfWork.Repository<ChangeLogRepository>().GetAllAsync(filter: filter);
+                // var changelogs = await _changeLogRepo.GetAllAsync(filter: filter);
                 var changelogsDTO = _mapper.Map<List<ChangeLogDTO>>(changelogs);
 
 

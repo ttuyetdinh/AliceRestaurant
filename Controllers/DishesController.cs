@@ -13,6 +13,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static AliceRestaurant.Ultilities.SD;
+using AliceRestaurant.DataAccess.UnitOfWork.IUnitOfWork;
 
 namespace AliceRestaurant.Controllers
 {
@@ -26,6 +27,7 @@ namespace AliceRestaurant.Controllers
         private readonly IRestaurantRepository _restaurantRepo;
         private readonly IRestaurantDishRepository _restaurantDishRepo;
         private readonly IChangeLogServiceFactory _changeLogServiceFactory;
+        private readonly IUnitofWork _unitOfWork;
         private readonly IMapper _mapper;
 
 
@@ -34,7 +36,7 @@ namespace AliceRestaurant.Controllers
             IMapper mapper, IDineInCategoryRepository dineInCatRepo,
             IDeliveryCategoryRepository deliveryCatRepo,
             IRestaurantRepository restaurantRepo, IRestaurantDishRepository restaurantDishRepo,
-            IChangeLogServiceFactory changeLogServiceFactory)
+            IChangeLogServiceFactory changeLogServiceFactory, IUnitofWork unitOfWork)
         {
             _dishRepo = dishRepo;
             _mapper = mapper;
@@ -43,6 +45,7 @@ namespace AliceRestaurant.Controllers
             _restaurantRepo = restaurantRepo;
             _restaurantDishRepo = restaurantDishRepo;
             _changeLogServiceFactory = changeLogServiceFactory;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -197,10 +200,19 @@ namespace AliceRestaurant.Controllers
 
                 // Step 1: Create the dish
                 var toInsert = _mapper.Map<Dish>(dishDTO);
-                var newDish = await _dishRepo.CreateAsync(toInsert);
-
+                // var newDish = await _dishRepo.CreateAsync(toInsert);
+                await _unitOfWork.BeginTransactionAsync();
+                var newDish = await _unitOfWork.Repository<IDishRepository>().CreateAsync(toInsert);
+                await _unitOfWork.SaveAsync();
+                await _unitOfWork.CommitAsync();
                 // Step 2: Create the restaurant dishes
-                var restaurantDishes = await _restaurantDishRepo.CreateRangeAsync(newDish.DishId, restaurantIds);
+                // var restaurantDishes = await _restaurantDishRepo.CreateRangeAsync(newDish.DishId, restaurantIds);
+                await _unitOfWork.BeginTransactionAsync();
+                var restaurantDishes = await _unitOfWork.Repository<IRestaurantDishRepository>()
+                                                        .CreateRangeAsync(newDish.DishId, restaurantIds);
+
+                await _unitOfWork.SaveAsync();
+                await _unitOfWork.CommitAsync();
 
                 // Step 3: Record to changelog
                 var changeLogService = _changeLogServiceFactory.CreateService<Dish>();
